@@ -3,7 +3,6 @@ import {
   AppWindowIcon,
   AudioWaveform,
   BookOpen,
-  Bot,
   Command,
   Frame,
   GalleryVerticalEnd,

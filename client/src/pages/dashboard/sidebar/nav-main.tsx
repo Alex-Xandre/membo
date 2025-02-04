@@ -3,7 +3,6 @@ import { ChevronRight, type LucideIcon } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -11,6 +10,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export function NavMain({
   items,
@@ -27,15 +27,24 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const handleNavigation = (url: string) => {
+    console.log(url);
+    navigate(url);
+  };
+
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+    <SidebarGroup className='mt-8'>
       <SidebarMenu>
         {items.map((item) => {
           if (item?.isDropdown) {
             return (
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip={item.title}>
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  onClick={() => handleNavigation(item.url)}
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </SidebarMenuButton>
@@ -61,10 +70,16 @@ export function NavMain({
                   <SidebarMenuSub>
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
-                        <SidebarMenuSubButton asChild>
-                          <a href={subItem.url}>
+                        <SidebarMenuSubButton
+                          asChild
+                          className='w-full'
+                        >
+                          <button
+                            onClick={() => handleNavigation(subItem.url)}
+                            className='flex items-center'
+                          >
                             <span>{subItem.title}</span>
-                          </a>
+                          </button>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

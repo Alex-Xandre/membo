@@ -47,10 +47,11 @@ const ActivationCodeLayout: React.FC = () => {
       const searchParams = new URLSearchParams(location.search);
       const token = searchParams.get('token');
       console.log(code.length);
-      if (code.every((digit) => digit !== '')) {
-        return toast.error('OTP cannot be empty');
-      }
+
       const handleActivate = async () => {
+        if (code.every((digit) => digit !== '')) {
+          return toast.error('OTP cannot be empty');
+        }
         const res = await activateUser({ activation_token: token, code: code.join('') });
 
         if (res === undefined || res.success === false)

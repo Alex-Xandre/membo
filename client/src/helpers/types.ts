@@ -41,10 +41,11 @@ export interface PersonalTypes {
 }
 export interface UserTypes {
   password: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'tenant';
   userId: string;
   _id: string;
   personalData: PersonalTypes;
   email: string;
   accountId: string;
+  profile?: string;
 }

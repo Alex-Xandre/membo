@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { ObjectId } from 'mongoose';
 
 export interface CustomRequest extends Request {
   user?: {
@@ -33,9 +34,32 @@ export interface PersonalTypes {
 //user types
 export interface UserTypes {
   password: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'tenant';
   userId: string;
   personalData: PersonalTypes;
   email: string;
-  accountId:string
+  accountId: string;
+  profile: string;
+
+  tenantUserId: {
+    tenantId: string;
+    tenantRole: 'admin' | 'user' | 'tenant';
+  };
+}
+
+//events
+
+export interface EventTypes {
+  eventName: string;
+  eventDescription: string;
+  eventStartDate: string;
+  eventStartTime: string;
+  eventEndDate: string;
+  eventEndTime: string;
+  eventAddress: {
+    fullAddress: string;
+    latitude: number;
+    longitude: number;
+  };
+  createdBy: ObjectId;
 }

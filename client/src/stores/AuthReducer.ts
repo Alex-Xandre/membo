@@ -30,7 +30,7 @@ const AuthReducer = (state: any, action: { type: any; payload?: UserTypes & { to
     case 'GET_ALL_USER':
       return {
         ...state,
-        allUser: action.payload,
+        allUser: (action.payload as any)?.filter((user) => user.role !== 'admin'),
       };
 
     case 'ADD_USER': {

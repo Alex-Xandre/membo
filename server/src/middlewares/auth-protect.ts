@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import User from '../models/user-model';
+import User from '../users/models/user-model';
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 

@@ -75,11 +75,11 @@ export const accountForm = [
     type: 'text',  required: true,
   },
 
-  {
-    name: 'password',
-    label: 'Password',
-    type: 'password',  required: true,
-  },
+  // {
+  //   name: 'password',
+  //   label: 'Password',
+  //   type: 'password',  required: true,
+  // },
 
   {
     name: 'role',

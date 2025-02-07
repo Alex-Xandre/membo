@@ -7,14 +7,15 @@ import { PlusIcon } from 'lucide-react';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NewTenantUser from './new';
+import { useAuth } from '@/stores/AuthContext';
 
 const TenantUsers = () => {
   const navigate = useNavigate();
 
   const columns = [
     { header: 'ID', accessor: '_id' },
-    { header: 'Title', accessor: 'title' },
-    { header: 'Description', accessor: 'description' },
+    { header: 'User', accessor: 'user' },
+    { header: 'Role', accessor: 'role' },
   ];
 
   const breadcrumbItems = [
@@ -23,6 +24,8 @@ const TenantUsers = () => {
   ];
 
   const params = useLocation();
+
+  const { allUser } = useAuth();
 
   if (params.search.includes('new')) {
     return <NewTenantUser />;
@@ -39,10 +42,18 @@ const TenantUsers = () => {
         </Button>
       </NavContainer>
       <ReusableTable
-        data={[]}
+        data={allUser
+          .filter((item) => item.tenantUserId?.tenantId === params.pathname.substring(1))
+          .map((x) => {
+            return {
+              ...x,
+              user: x.personalData?.firstName + ' ' + x.personalData?.lastName,
+            };
+          })}
         columns={columns as any}
-        onEdit={(item) => navigate(`/courses/new?=${item?._id}`, { state: { isEdit: true } })}
-        onView={(item) => navigate(`/moduleId?=${item?._id}`, { state: { isEdit: true } })}
+        onEdit={(item) =>
+          navigate(`${window.location.pathname}?view=users&new=${item?._id}`, { state: { isEdit: true } })
+        }
         title='Invoice'
         tableHeader={''}
       />

@@ -79,11 +79,7 @@ const ReusableTable = <T,>({
                       onClick={() => onEdit(row)}
                       className='text-green-500 mr-5'
                     >
-                      {title === 'Applicant'
-                        ? 'View Application'
-                        : title === 'Requirement' || title === 'sk' || title === 'kk'
-                        ? 'View'
-                        : 'Edit'}
+                      View
                     </button>
 
                     {onView && (

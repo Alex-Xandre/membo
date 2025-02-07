@@ -21,6 +21,7 @@ const App = () => {
   const { isLoggedIn, user, dispatch } = useAuth();
   const { socket } = useContext(SocketContext);
   const { open } = useSidebar();
+
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token) {

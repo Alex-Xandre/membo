@@ -6,20 +6,22 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  registerUserByAdmin,
   validateSession,
 } from '../controllers/user-controller';
-import protect from '../middlewares/auth-protect';
+import protect from '../../middlewares/auth-protect';
 
 const router = express.Router();
-
+router.post('/add-user', protect, registerUserByAdmin);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.delete('/logout', logoutUser);
 router.post('/activate', activate);
 router.get('/user', protect, getUser);
 router.get('/all-user', protect, getAllUsers);
-router.post('/add-user', protect, registerUser);
+
 
 router.get('/validate-session', validateSession);
+
 
 export default router;

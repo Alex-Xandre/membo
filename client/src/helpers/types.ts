@@ -48,4 +48,9 @@ export interface UserTypes {
   email: string;
   accountId: string;
   profile?: string;
+
+  tenantUserId?:{
+    tenantId?:string,
+    tenantRole?: 'admin'| 'user'| "tenant"
+  }
 }

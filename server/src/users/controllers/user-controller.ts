@@ -1,15 +1,14 @@
 import expressAsyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { activationToken, generateToken } from '../middlewares/jwt-functions';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-
 import User from '../models/user-model';
 import Activation from '../models/activation-model';
 import Session from '../models/session-model';
-import { CustomRequest } from '../types';
-import { sendRegistration } from '../helpers/sendMail';
+import { sendRegistration } from '../../helpers/sendMail';
+import { activationToken, generateToken } from '../../middlewares/jwt-functions';
+import { CustomRequest } from '../../types';
 
 //register and update
 export const registerUser = expressAsyncHandler(async (req, res) => {
@@ -79,8 +78,7 @@ export const activate = expressAsyncHandler(async (req, res) => {
 
     const user = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN);
 
-
-    console.log(user)
+    console.log(user);
     if (!user) {
       res.status(400);
       throw new Error('Invalid Token');
@@ -91,7 +89,7 @@ export const activate = expressAsyncHandler(async (req, res) => {
       throw new Error('Activation record not found');
     }
 
-    console.log(code, isActivate.code)
+    console.log(code, isActivate.code);
     const isValidCode = isActivate && (await bcrypt.compare(code, isActivate.code));
     const currentTime = new Date();
     const expiryTime = new Date(isActivate.expiry);
@@ -101,7 +99,7 @@ export const activate = expressAsyncHandler(async (req, res) => {
       throw new Error('Invalid or expired code. Please try again');
     }
 
-    delete user._id
+    delete user._id;
     const newUser = await User.create(user);
 
     if (newUser) {
@@ -124,7 +122,6 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
     const data = req.body;
     const { userId, password } = data;
 
-    
     if (!userId || !password) {
       res.status(400);
       throw new Error('Please fill all the fields');
@@ -165,7 +162,6 @@ export const validateSession = expressAsyncHandler(async (req: Request, res: Res
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     res.status(401).json({ msg: 'No token provided' });
-    return;
   }
 
   const token = authorization.split(' ')[1];
@@ -180,7 +176,6 @@ export const validateSession = expressAsyncHandler(async (req: Request, res: Res
 
     if (!session) {
       res.status(401).json({ msg: 'Session expired. Please log in again.' });
-      return;
     }
 
     // If the session is valid
@@ -219,3 +214,41 @@ export const getAllUsers = async (req: CustomRequest, res) => {
   const filterUser = allUser.filter((x) => (x as any)._id.toString() !== req.user._id);
   res.status(200).json(filterUser);
 };
+
+//register
+export const registerUserByAdmin = expressAsyncHandler(async (req, res) => {
+  try {
+    const data = req.body;
+
+    console.log(data);
+    if (!mongoose.isValidObjectId(data._id)) {
+      const { email, userId } = data;
+
+      if (!email || !userId) {
+        res.status(400);
+        throw new Error('Please Fill all the Fields');
+      }
+
+      const isUserEmail = await User.findOne({ email });
+      const isUsername = await User.findOne({ userId });
+
+      if (isUsername || isUserEmail) {
+        res.status(400);
+        throw new Error('User already existss');
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(data.password, salt);
+      delete data._id;
+      const newUser = await User.create({ ...data, password: hashedPassword, userId });
+
+      res.status(200).json({ msg: 'User Added Succesfully', newUser });
+    } else {
+      const updateuser = await User.findByIdAndUpdate(data._id, data, { new: true });
+      res.status(200).json(updateuser);
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ msg: error.message });
+  }
+});

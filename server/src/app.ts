@@ -5,7 +5,8 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 
 import conn from './config/dbConnection';
-import userRoute from './routes/user-route';
+import userRoute from './users/routes/user-route';
+
 import { socketHandler } from './middlewares/socket-handler';
 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '5000mb', extended: true }));
 

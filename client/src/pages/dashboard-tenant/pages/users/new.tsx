@@ -1,8 +1,8 @@
 import Breadcrumb from '@/components/bread-crumb';
 import { Label } from '@/components/ui/label';
 import { UserTypes } from '@/helpers/types';
-import React, { useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/stores/AuthContext';
 import { Input } from '@/components/ui/input';
 import { handleFileChange } from '@/helpers/file-upload';
@@ -10,10 +10,14 @@ import { accountForm, addressForm, personalForm } from './forms-data';
 import FormContainer from './form-container';
 import SelectInput from '@/components/reusable-select';
 import { Button } from '@/components/ui/button';
+import { registerUserByAdmin } from '@/api/register.api';
+import toast from 'react-hot-toast';
+import { getAllUser } from '@/api/get.info.api';
+import { useFetchAndDispatch } from '@/helpers/useFetch';
 
 const NewTenantUser = () => {
   const location = useParams();
-  const { user } = useAuth();
+  const { user, allUser } = useAuth();
 
   const inputRef = useRef(null);
 
@@ -54,6 +58,28 @@ const NewTenantUser = () => {
     },
   });
 
+  const item = useLocation();
+  const { state } = item;
+
+  useFetchAndDispatch(getAllUser, 'GET_ALL_USER');
+
+  useEffect(() => {
+    if (state?.isEdit) {
+      const searchParams = new URLSearchParams(item.search);
+
+      const myParamValue = searchParams.get('new');
+console.log(myParamValue)
+      if (!myParamValue) return;
+      const items = allUser.find((x) => x._id === myParamValue) as UserTypes;
+      if (!items) return;
+
+      console.log(items)
+      setUserData({...items,
+        personalData:items.personalData
+      });
+    }
+  }, [allUser, item.search, state?.isEdit]);
+
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedUrl = await handleFileChange(e);
     if (uploadedUrl) {
@@ -65,14 +91,15 @@ const NewTenantUser = () => {
   };
 
   const onInputChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    const parsedValue = type === 'number' ? Number(value) || 0 : value;
 
     if (name in userData.personalData) {
       setUserData((prev) => ({
         ...prev,
         personalData: {
           ...prev.personalData,
-          [name]: value,
+          [name]: parsedValue,
         },
       }));
     } else if (name in userData.personalData.address) {
@@ -82,22 +109,45 @@ const NewTenantUser = () => {
           ...prev.personalData,
           address: {
             ...prev.personalData.address,
-            [name]: value,
+            [name]: parsedValue,
           },
         },
       }));
     } else {
       setUserData((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: parsedValue,
       }));
     }
   };
 
+  const navigate = useNavigate();
+  console.log(location);
+  const { dispatch } = useAuth();
+
+  const handleSubmit = async () => {
+    console.log(new Date(userData.personalData.birthday as string).toISOString().split('T')[0]);
+
+    const res = await registerUserByAdmin({
+      ...userData,
+      password: new Date(userData.personalData.birthday as string).toISOString().split('T')[0],
+      tenantUserId: {
+        tenantId: location.tenantId,
+        tenantRole: userData.role,
+      },
+    });
+
+    if (res.success === false) return toast.error(res.data?.msg || 'Error');
+    toast.success(res.msg);
+    dispatch({ type: 'ADD_USER', payload: res.newUser });
+    setTimeout(() => {
+      navigate(-1);
+    }, 1500);
+  };
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
-      <form className='w-full pb-5'>
+      <div className='w-full pb-5'>
         <FormContainer title='Account Information'>
           <img
             src={userData.profile ? userData.profile : 'https://placehold.co/400'}
@@ -174,7 +224,7 @@ const NewTenantUser = () => {
                   name={items.name}
                   className={`${items.type === 'file' && 'hidden'}`}
                   onChange={onInputChange}
-                  value={items.type === 'file' ? undefined : (userData[items.name] as keyof UserTypes as string)}
+                  value={items.type === 'file' ? undefined : (userData.personalData[items.name] as keyof UserTypes as string)}
                 />
               )}
             </div>
@@ -195,22 +245,23 @@ const NewTenantUser = () => {
                 name={items.name}
                 className={`${items.type === 'file' && 'hidden'}`}
                 onChange={onInputChange}
-                value={items.type === 'file' ? undefined : (userData[items.name] as keyof UserTypes as string)}
+                value={items.type === 'file' ? undefined : (userData.personalData.address[items.name] as keyof UserTypes as string)}
               />
             </div>
           ))}
         </FormContainer>
         <footer className='mt-4'>
-          <Button type='submit'>Save</Button>
+          <Button onClick={handleSubmit}>Save</Button>
           <Button
             type='button'
             variant='destructive'
-            className='ml-4'
+            className='ml-2'
+            onClick={() => navigate(-1)}
           >
             Cancel
           </Button>
         </footer>
-      </form>
+      </div>
     </>
   );
 };

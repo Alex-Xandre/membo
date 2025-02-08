@@ -56,6 +56,8 @@ export interface EventTypes {
   eventStartTime: string;
   eventEndDate: string;
   eventEndTime: string;
+  eventBanner: string;
+  eventType: string;
   eventAddress: {
     fullAddress: string;
     latitude: number;

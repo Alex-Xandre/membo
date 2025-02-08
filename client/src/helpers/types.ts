@@ -49,8 +49,26 @@ export interface UserTypes {
   accountId: string;
   profile?: string;
 
-  tenantUserId?:{
-    tenantId?:string,
-    tenantRole?: 'admin'| 'user'| "tenant"
-  }
+  tenantUserId?: {
+    tenantId?: string;
+    tenantRole?: 'admin' | 'user' | 'tenant';
+  };
+}
+
+export interface EventTypes {
+  _id: string;
+  eventName: string;
+  eventDescription: string;
+  eventStartDate: string;
+  eventStartTime: string;
+  eventEndDate: string;
+  eventEndTime: string;
+  eventBanner: string;
+  eventType: string;
+  eventAddress: {
+    fullAddress: string;
+    latitude: number;
+    longitude: number;
+  };
+  createdBy: string;
 }

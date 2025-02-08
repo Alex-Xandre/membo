@@ -6,7 +6,7 @@ import cors from 'cors';
 
 import conn from './config/dbConnection';
 import userRoute from './users/routes/user-route';
-
+import eventRoute from './events/routes/event-route';
 import { socketHandler } from './middlewares/socket-handler';
 
 dotenv.config();
@@ -45,6 +45,7 @@ app.use(express.urlencoded({ limit: '5000mb', extended: true }));
 
 // Routes
 app.use('/api/auth', userRoute);
+app.use('/api/event', eventRoute);
 
 // Static files
 app.use('/uploads', express.static('uploads'));

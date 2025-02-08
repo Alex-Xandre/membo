@@ -1,7 +1,6 @@
 import express from 'express';
-
-import protect from '../middlewares/auth-protect';
-import { getEventById, getEvents, newEvent } from '../events/controllers/event-controller';
+import protect from '../../middlewares/auth-protect';
+import { getEventById, getEvents, newEvent } from '../controllers/event-controller';
 
 const router = express.Router();
 

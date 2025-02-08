@@ -66,17 +66,13 @@ const NewTenantUser = () => {
   useEffect(() => {
     if (state?.isEdit) {
       const searchParams = new URLSearchParams(item.search);
-
       const myParamValue = searchParams.get('new');
-console.log(myParamValue)
+
       if (!myParamValue) return;
       const items = allUser.find((x) => x._id === myParamValue) as UserTypes;
       if (!items) return;
 
-      console.log(items)
-      setUserData({...items,
-        personalData:items.personalData
-      });
+      setUserData({ ...items, personalData: items.personalData });
     }
   }, [allUser, item.search, state?.isEdit]);
 
@@ -122,12 +118,10 @@ console.log(myParamValue)
   };
 
   const navigate = useNavigate();
-  console.log(location);
+
   const { dispatch } = useAuth();
 
   const handleSubmit = async () => {
-    console.log(new Date(userData.personalData.birthday as string).toISOString().split('T')[0]);
-
     const res = await registerUserByAdmin({
       ...userData,
       password: new Date(userData.personalData.birthday as string).toISOString().split('T')[0],
@@ -139,11 +133,12 @@ console.log(myParamValue)
 
     if (res.success === false) return toast.error(res.data?.msg || 'Error');
     toast.success(res.msg);
-    dispatch({ type: 'ADD_USER', payload: res.newUser });
+    dispatch({ type: 'ADD_USER', payload: res });
     setTimeout(() => {
       navigate(-1);
     }, 1500);
   };
+
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
@@ -224,7 +219,9 @@ console.log(myParamValue)
                   name={items.name}
                   className={`${items.type === 'file' && 'hidden'}`}
                   onChange={onInputChange}
-                  value={items.type === 'file' ? undefined : (userData.personalData[items.name] as keyof UserTypes as string)}
+                  value={
+                    items.type === 'file' ? undefined : (userData.personalData[items.name] as keyof UserTypes as string)
+                  }
                 />
               )}
             </div>
@@ -245,7 +242,11 @@ console.log(myParamValue)
                 name={items.name}
                 className={`${items.type === 'file' && 'hidden'}`}
                 onChange={onInputChange}
-                value={items.type === 'file' ? undefined : (userData.personalData.address[items.name] as keyof UserTypes as string)}
+                value={
+                  items.type === 'file'
+                    ? undefined
+                    : (userData.personalData.address[items.name] as keyof UserTypes as string)
+                }
               />
             </div>
           ))}

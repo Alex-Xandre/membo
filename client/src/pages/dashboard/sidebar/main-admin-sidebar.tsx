@@ -70,12 +70,14 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
         title: 'Tenants',
         url: '#',
         icon: BookOpen,
-        items: allUser.map((item) => {
-          return {
-            title: item.accountId,
-            url: `/${item._id}`,
-          };
-        }),
+        items: allUser
+          .filter((x) => x.role !== 'user')
+          .map((item) => {
+            return {
+              title: item.accountId,
+              url: `/${item._id}`,
+            };
+          }),
       },
       {
         title: 'Profile',
@@ -168,7 +170,7 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
           {open ? <XIcon className='h-5' /> : <PanelLeft className='h-5' />}
         </button>
 
-        <p className={`absolute font-semibold top-3 ${open?"left-64 ml-10":"left-16 ml-2"}`}> {tenantName}</p>
+        <p className={`absolute font-semibold top-3 ${open ? 'left-64 ml-10' : 'left-16 ml-2'}`}> {tenantName}</p>
       </nav>
 
       <SidebarHeader>{/* <TeamSwitcher teams={data.teams} /> */}</SidebarHeader>

@@ -2,6 +2,7 @@ import expressAsyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 import Event from '../models/event-model';
 import { Request, Response } from 'express';
+import { CustomRequest } from '../../types';
 
 export const newEvent = expressAsyncHandler(async (req: any, res: Response) => {
   const data = req.body;
@@ -21,10 +22,14 @@ export const newEvent = expressAsyncHandler(async (req: any, res: Response) => {
   }
 });
 
-export const getEvents = async (req: Request, res: Response) => {
+export const getEvents = async (req: CustomRequest, res: Response) => {
   try {
     const events = await Event.find({});
-    res.status(200).json(events);
+    const isAdmin =
+      req.user.role === 'admin'
+        ? events
+        : events.filter((x) => x.createdBy.toString() === (req.user as any).tenantUserId?.tenantId);
+    res.status(200).json(isAdmin);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

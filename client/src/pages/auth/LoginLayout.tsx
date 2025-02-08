@@ -7,7 +7,7 @@ import { SocketContext } from '@/stores/SocketContext';
 import { EyeClosedIcon, EyeIcon, UserIcon } from 'lucide-react';
 import { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const LoginLayout = () => {
   const [data, setData] = useState({
@@ -23,21 +23,22 @@ const LoginLayout = () => {
   const { dispatch } = useAuth();
   const navigate = useNavigate();
   const { socket } = useContext(SocketContext);
-
+  const location = useParams();
   const handleSubmit = async () => {
     const res = await loginUser(data);
 
     if (res.success === false) return toast.error(res.data?.msg || 'Error');
 
-    // if (res.role === 'user') {
-    //   return toast.error('For employees, use the application');
-    // }
+    if (res.role !== 'admin' && location?.tenantId !== res?.tenantId) {
+      return toast.error('Account Error');
+    }
 
     sessionStorage.setItem('token', res.token);
     dispatch({ type: 'SIGNING', payload: res });
     socket.emit('login', res._id);
+
     setTimeout(() => {
-      navigate('/');
+      navigate(res.role === 'admin' ? '/' : `/${res.tenantId}`);
     }, 1500);
   };
 
@@ -103,7 +104,7 @@ const LoginLayout = () => {
 
             <div
               className='text-sm'
-              onClick={() => navigate('/register')}
+              onClick={() => navigate(`${location?.tenantId ? `/register?tenant=${location.tenantId}` : '/register'}`)}
             >
               Don't have an account?
               <span>

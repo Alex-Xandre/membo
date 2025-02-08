@@ -1,18 +1,5 @@
 import * as React from 'react';
-import {
-  AppWindowIcon,
-  AudioWaveform,
-  BookOpen,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PanelLeft,
-  PieChart,
-  Settings2,
-  UserIcon,
-  XIcon,
-} from 'lucide-react';
+import { AppWindowIcon, BookOpen, Frame, Map, PanelLeft, PieChart, Settings2, UserIcon, XIcon } from 'lucide-react';
 
 import {
   Sidebar,
@@ -25,125 +12,9 @@ import {
 import { NavMain } from './nav-main';
 import { Button } from '@headlessui/react';
 import { useAuth } from '@/stores/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { logoutUser } from '@/api/login.api';
-
-// This is sample data.
-const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  teams: [
-    {
-      name: 'Acme Inc',
-      logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
-  ],
-  navMain: [
-    {
-      title: 'Home',
-      url: '#',
-      icon: AppWindowIcon,
-      isActive: true,
-      isDropdown: true,
-    },
-    {
-      title: 'Courses',
-      url: '#',
-      icon: BookOpen,
-      items: [
-        {
-          title: 'Genesis',
-          url: '#',
-        },
-        {
-          title: 'Explorer',
-          url: '#',
-        },
-        {
-          title: 'Quantum',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Profile',
-      url: '#',
-      icon: UserIcon,
-      items: [
-        {
-          title: 'Introduction',
-          url: '#',
-        },
-        {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Settings',
-      url: '#',
-      icon: Settings2,
-      items: [
-        {
-          title: 'General',
-          url: '#',
-        },
-        {
-          title: 'Team',
-          url: '#',
-        },
-        {
-          title: 'Billing',
-          url: '#',
-        },
-        {
-          title: 'Limits',
-          url: '#',
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: 'Design Engineering',
-      url: '#',
-      icon: Frame,
-    },
-    {
-      name: 'Sales & Marketing',
-      url: '#',
-      icon: PieChart,
-    },
-    {
-      name: 'Travel',
-      url: '#',
-      icon: Map,
-    },
-  ],
-};
+import { useEvent } from '@/stores/EventContext';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { toggleSidebar, open } = useSidebar();
@@ -152,8 +23,103 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const onLogout = async () => {
     sessionStorage.removeItem('token');
     dispatch({ type: 'SIGNOUT' });
-    logoutUser()
+    logoutUser();
     nav('/');
+  };
+
+  const location = useLocation();
+
+  console.log(location);
+
+  const params = useParams();
+  console.log(location.pathname.split('/')[1]);
+
+  // This is sample data.
+  const data = {
+    user: {
+      name: 'shadcn',
+      email: 'm@example.com',
+      avatar: '/avatars/shadcn.jpg',
+    },
+
+    navMain: [
+      {
+        title: 'Home',
+        url: `${location.pathname.split('/')[1]}`,
+        icon: AppWindowIcon,
+        isActive: true,
+        isDropdown: true,
+      },
+      {
+        title: 'Events',
+        url: `${location.pathname.split('/')[1]}/events`,
+        icon: BookOpen,
+        isDropdown: true,
+      },
+      {
+        title: 'Profile',
+        url: '#',
+        icon: UserIcon,
+        items: [
+          {
+            title: 'Introduction',
+            url: '#',
+          },
+          {
+            title: 'Get Started',
+            url: '#',
+          },
+          {
+            title: 'Tutorials',
+            url: '#',
+          },
+          {
+            title: 'Changelog',
+            url: '#',
+          },
+        ],
+      },
+      {
+        title: 'Settings',
+        url: '#',
+        icon: Settings2,
+        items: [
+          {
+            title: 'General',
+            url: '#',
+          },
+          {
+            title: 'Team',
+            url: '#',
+          },
+          {
+            title: 'Billing',
+            url: '#',
+          },
+          {
+            title: 'Limits',
+            url: '#',
+          },
+        ],
+      },
+    ],
+    projects: [
+      {
+        name: 'Design Engineering',
+        url: '#',
+        icon: Frame,
+      },
+      {
+        name: 'Sales & Marketing',
+        url: '#',
+        icon: PieChart,
+      },
+      {
+        name: 'Travel',
+        url: '#',
+        icon: Map,
+      },
+    ],
   };
 
   return (

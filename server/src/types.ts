@@ -6,6 +6,7 @@ export interface CustomRequest extends Request {
     _id: string;
     name: string;
     role: string;
+    tenantId?: string;
   };
 }
 
@@ -64,4 +65,5 @@ export interface EventTypes {
     longitude: number;
   };
   createdBy: ObjectId;
+  eventIsFeatured: boolean;
 }

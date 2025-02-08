@@ -278,7 +278,7 @@ const RegisterLayout: React.FC = () => {
 
         <div
           className='text-sm mt-1'
-          onClick={() => navigate('/')}
+          onClick={() => navigate(-1)}
         >
           Already have an account?
           <span>

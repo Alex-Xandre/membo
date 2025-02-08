@@ -71,4 +71,5 @@ export interface EventTypes {
     longitude: number;
   };
   createdBy: string;
+  eventIsFeatured?: boolean;
 }

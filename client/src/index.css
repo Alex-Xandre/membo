@@ -6,35 +6,34 @@
 
 :root {
   /* Primary Color Palette (Standard Black and White) */
-  --color-primary: #000000;                /* Black (Primary) */
-  --color-primary-light: #808080;          /* Light Gray */
-  --color-primary-dark: #333333;           /* Dark Gray */
+  --color-primary: #000000; /* Black (Primary) */
+  --color-primary-light: #808080; /* Light Gray */
+  --color-primary-dark: #333333; /* Dark Gray */
 
   /* Secondary Color (Accent) */
-  --color-secondary: #ffffff;              /* White */
-  --color-secondary-light: #f4f4f4;        /* Light White */
-  --color-secondary-dark: #dddddd;         /* Dark White (off-white) */
+  --color-secondary: #ffffff; /* White */
+  --color-secondary-light: #f4f4f4; /* Light White */
+  --color-secondary-dark: #dddddd; /* Dark White (off-white) */
 
   /* Tertiary and Accent Colors */
-  --color-tertiary: #333333;               /* Darker Gray */
-  --color-accent: #ff5722;                 /* Accent Color (Orange) */
+  --color-tertiary: #333333; /* Darker Gray */
+  --color-accent: #ff5722; /* Accent Color (Orange) */
 
   /* Border and Focus Colors */
-  --color-primary-border: rgba(0, 0, 0, 0.1);  /* Light Border */
+  --color-primary-border: rgba(0, 0, 0, 0.1); /* Light Border */
   --color-primary-border-focus: rgba(0, 0, 0, 0.2); /* Focus Border */
 
   /* Main Background Color */
-  --color-main: #fafafa;                   /* Light Background */
+  --color-main: #fafafa; /* Light Background */
 }
 * {
-
   max-width: 2000px;
   box-sizing: border-box;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .bg-main {
-  background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #1877F2, #1877F2);
+  background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #1877f2, #1877f2);
 }
 
 /* Scrollbar Styling */
@@ -136,6 +135,26 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  @responsive {
+    .masonry {
+      column-gap: 1.5em;
+      column-count: 1;
+    }
+    .masonry-sm {
+      column-gap: 1.5em;
+      column-count: 2;
+    }
+    .masonry-md {
+      column-gap: 1em;
+      column-count: 4;
+    }
+    .break-inside-avoid {
+      break-inside: avoid;
+    }
   }
 }
 

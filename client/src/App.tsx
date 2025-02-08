@@ -1,7 +1,7 @@
 import React, { Suspense, useCallback, useContext, useEffect } from 'react';
 import LoginLayout from './pages/auth/LoginLayout';
 import Home from './pages/dashboard/Home';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useAuth } from './stores/AuthContext';
 import NotFound from './helpers/not-found';
 import { SocketContext } from './stores/SocketContext';
@@ -16,12 +16,14 @@ import { useFetchAndDispatch } from './helpers/useFetch';
 import TenantUsers from './pages/dashboard-tenant/pages/users';
 import { useSidebar } from './components/ui/sidebar';
 import Container from './components/container';
+import EventHomeUser from './pages/user-dashboard/user-event';
 
 const App = () => {
   const { isLoggedIn, user, dispatch } = useAuth();
   const { socket } = useContext(SocketContext);
   const { open } = useSidebar();
 
+  const navigate = useNavigate();
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -34,6 +36,11 @@ const App = () => {
         dispatch({ type: 'SIGNING', payload: res });
         dispatch({ type: 'GET_ALL_USER', payload: fetchUsers.filter((user) => user.role !== 'admin') });
         socket.emit('login', res._id);
+
+        console.log(res);
+        setTimeout(() => {
+          navigate(res.role === 'admin' ? '/' : `/${res.tenantUserId?.tenantId}`);
+        }, 1500);
       };
       handlegetInfo();
     }
@@ -52,8 +59,22 @@ const App = () => {
     { path: '/:tenantId', element: <TenantHome /> },
   ];
 
+  const userRoutes = [
+    {
+      path: '/:tenantId',
+
+      element: <Home />,
+    },
+    {
+      path: '/:tenantId/events',
+
+      element: <EventHomeUser />,
+    },
+  ];
+
   const publicRoutes = [
     { path: '/', element: <LoginLayout /> },
+    { path: '/:tenantId', element: <LoginLayout /> },
     { path: '/register', element: <RegisterLayout /> },
   ];
 
@@ -63,6 +84,16 @@ const App = () => {
         {isLoggedIn &&
           user.role === 'admin' &&
           adminRoutes.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={route.element}
+            />
+          ))}
+
+        {isLoggedIn &&
+          user.role === 'user' &&
+          userRoutes.map((route) => (
             <Route
               key={route.path}
               path={route.path}

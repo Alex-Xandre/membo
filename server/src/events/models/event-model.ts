@@ -13,6 +13,7 @@ const eventSchema = new Schema<EventTypes>(
     eventEndDate: { type: String },
     eventEndTime: { type: String },
     eventType: String,
+    eventIsFeatured: { type: Boolean, default: false },
     eventAddress: {
       fullAddress: { type: String },
       latitude: { type: Number },

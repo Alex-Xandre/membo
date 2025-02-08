@@ -147,6 +147,7 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
         role: user.role,
         _id: user._id,
         token,
+        tenantId: user?.tenantUserId?.tenantId
       });
     } else {
       res.status(500).json({ msg: 'Invalid Email or Password' });

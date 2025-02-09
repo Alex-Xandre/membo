@@ -19,6 +19,7 @@ const eventSchema = new Schema<EventTypes>(
       latitude: { type: Number },
       longitude: { type: Number },
     },
+    eventPrice: { type: Number, default: 0 },
   },
   {
     timestamps: true,

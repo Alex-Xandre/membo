@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import Event from '../models/event-model';
 import { Request, Response } from 'express';
 import { CustomRequest } from '../../types';
+import Transaction from '../models/transaction-model';
 
 export const newEvent = expressAsyncHandler(async (req: any, res: Response) => {
   const data = req.body;
@@ -46,6 +47,38 @@ export const getEventById = async (req: Request, res: Response) => {
       res.status(404).json({ msg: 'Event not found' });
     }
     res.status(200).json(event);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+//ransaction-creation
+export const createEvent = expressAsyncHandler(async (req: any, res: Response) => {
+  const data = req.body;
+
+  try {
+    if (!mongoose.isValidObjectId(data._id)) {
+      delete data._id;
+      const createTransaction = await Transaction.create(data);
+      req.io.emit('update-transaction', createTransaction);
+      res.status(200).json(createTransaction);
+    } else {
+      const updateTransaction = await Transaction.findByIdAndUpdate(data._id, data, { new: true });
+      req.io.emit('update-transaction', updateTransaction);
+      res.status(200).json(updateTransaction);
+    }
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
+
+export const getTransactions = async (req: CustomRequest, res: Response) => {
+  try {
+    const transaction = await Transaction.find({});
+    const isAdmin =
+      req.user.role === 'admin'
+        ? transaction
+        : transaction.filter((x) => x.tenantId.toString() === (req.user as any).tenantUserId?.tenantId);
+    res.status(200).json(isAdmin);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

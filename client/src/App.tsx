@@ -17,6 +17,9 @@ import TenantUsers from './pages/dashboard-tenant/pages/users';
 import { useSidebar } from './components/ui/sidebar';
 import Container from './components/container';
 import EventHomeUser from './pages/user-dashboard/user-event';
+import { useCartStore } from './pages/user-dashboard/cart/cart-store';
+import CartContainer from './pages/user-dashboard/cart/cart-container';
+import CheckOutHome from './pages/user-dashboard/user-checkout';
 
 const App = () => {
   const { isLoggedIn, user, dispatch } = useAuth();
@@ -37,10 +40,10 @@ const App = () => {
         dispatch({ type: 'GET_ALL_USER', payload: fetchUsers.filter((user) => user.role !== 'admin') });
         socket.emit('login', res._id);
 
-        console.log(res);
-        setTimeout(() => {
-          navigate(res.role === 'admin' ? '/' : `/${res.tenantUserId?.tenantId}`);
-        }, 1500);
+   
+        // setTimeout(() => {
+        //   navigate(res.role === 'admin' ? '/' : `/${res.tenantUserId?.tenantId}`);
+        // }, 1500);
       };
       handlegetInfo();
     }
@@ -67,8 +70,12 @@ const App = () => {
     },
     {
       path: '/:tenantId/events',
-
       element: <EventHomeUser />,
+    },
+
+    {
+      path: '/:tenantId/events/checkout=true',
+      element: <CheckOutHome />,
     },
   ];
 
@@ -118,6 +125,7 @@ const App = () => {
     );
   }, [isLoggedIn, user]);
 
+  const isOpen = useCartStore((state) => state.isOpen);
   return (
     <div className='  overflow-y-hidden overflow-x-hidden h-[100dvh] w-screen'>
       <Toaster position='top-right' />
@@ -125,6 +133,7 @@ const App = () => {
         {renderRoutes()}
         {isLoggedIn && user.role === 'user' && <AppSidebar />}
 
+        {isLoggedIn && isOpen && <CartContainer />}
         {isLoggedIn && user.role === 'admin' && <AppSidebarAdmin />}
         {/* <SidebarTrigger className='ml-60' /> */}
       </Suspense>

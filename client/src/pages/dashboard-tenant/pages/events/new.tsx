@@ -41,6 +41,7 @@ const NewEvents = () => {
       longitude: 0,
     },
     createdBy: '',
+    eventPrice: null,
   });
 
   const navigate = useNavigate();
@@ -73,14 +74,23 @@ const NewEvents = () => {
     }
   };
 
-  const onInputChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const parsedValue = type === 'number' ? Number(value) || 0 : value;
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    const sanitizedValue = value.replace(/^0+/, '') || ''; // Remove leading zeros
 
     setEventData((prev) => ({
       ...prev,
-      [name]: parsedValue,
+      [name]: sanitizedValue === '' ? null : Number(sanitizedValue),
     }));
+  };
+
+  const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (e.target.value === '0') {
+      setEventData((prev) => ({
+        ...prev,
+        [e.target.name]: '',
+      }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -144,6 +154,8 @@ const NewEvents = () => {
               ) : (
                 <Input
                   type={items.type}
+                  onFocus={onFocus}
+             
                   name={items.name}
                   onChange={items.type === 'file' ? onFileChange : onInputChange}
                   value={items.type === 'file' ? undefined : (eventData[items.name] as keyof EventTypes as string)}

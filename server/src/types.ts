@@ -66,4 +66,24 @@ export interface EventTypes {
   };
   createdBy: ObjectId;
   eventIsFeatured: boolean;
+  eventPrice: number;
+}
+
+export interface TransactionEvent {
+  id: ObjectId;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface TransactionTypes {
+  _id?: ObjectId;
+  userId: ObjectId;
+  events: TransactionEvent[];
+  total: number;
+  paymentStatus: 'pending' | 'completed' | 'failed';
+  paymentMethod: 'card' | 'paypal' | 'bank_transfer';
+  transactionId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

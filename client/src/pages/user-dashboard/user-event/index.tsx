@@ -15,6 +15,19 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import SelectInput from '@/components/reusable-select';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { useCartStore } from '../cart/cart-store';
+
 const EventHomeUser = () => {
   const { events } = useEvent();
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -40,10 +53,36 @@ const EventHomeUser = () => {
   const featuredEvents = filteredEvents.filter((event) => event.eventIsFeatured);
   const nonFeaturedEvents = filteredEvents.filter((event) => !event.eventIsFeatured);
 
-  console.log(events);
+  const myParamValue = new URLSearchParams(useLocation().search).get('details');
+
+  const navigate = useNavigate();
+
+  const cart = useCartStore((state) => state.cart);
+
   return (
     <Container>
       <section className='w-full h-screen overflow-y-auto'>
+        {myParamValue && (
+          <Sheet
+            open
+            onOpenChange={(open) => !open && navigate(-1)}
+          >
+            <SheetContent className='w-[400px] sm:w-[540px]'>
+              <SheetHeader>
+                <SheetTitle>Edit profile</SheetTitle>
+                <SheetDescription>Make changes to your profile here. Click save when you're done.</SheetDescription>
+              </SheetHeader>
+              <div className='grid gap-4 py-4'>
+                <div className='grid grid-cols-4 items-center gap-4'>hi</div>
+              </div>
+              <SheetFooter>
+                <SheetClose asChild>
+                  <Button type='submit'>Save changes</Button>
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        )}
         {featuredEvents.length > 0 && (
           <div className='mb-6'>
             <h2 className='text-xl font-semibold mb-3'>Featured Events</h2>

@@ -72,4 +72,28 @@ export interface EventTypes {
   };
   createdBy: string;
   eventIsFeatured?: boolean;
+  eventPrice: number;
+}
+
+export interface TransactionEvent {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+export interface TransactionTypes {
+  _id?: string;
+  userId: string;
+  events: TransactionEvent[];
+  total: number;
+  paymentStatus: 'pending' | 'completed' | 'failed';
+  paymentMethod: 'card' | 'paypal' | 'bank_transfer';
+  transactionId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  firstName?: string;
+  lastname?: string;
+  email?: string;
+  contact?: number;
+  tenantId?: string;
 }

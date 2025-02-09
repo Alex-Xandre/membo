@@ -45,4 +45,10 @@ export const eventForm = [
     label: 'Event Type',
     type: 'option',
   },
+
+  {
+    name: 'eventPrice',
+    label: 'Purchase Price',
+    type: 'number',
+  },
 ];

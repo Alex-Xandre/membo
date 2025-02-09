@@ -10,6 +10,7 @@ import NewEvents from './new';
 import { getAllEvents } from '@/api/event.api';
 import { useFetchAndDispatch } from '@/helpers/useFetch';
 import { useEvent } from '@/stores/EventContext';
+
 const TenantEvent = () => {
   const columns = [
     { header: 'ID', accessor: '_id' },

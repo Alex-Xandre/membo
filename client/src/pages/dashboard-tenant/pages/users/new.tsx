@@ -142,6 +142,7 @@ const NewTenantUser = () => {
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
+
       <div className='w-full pb-5'>
         <FormContainer title='Account Information'>
           <img

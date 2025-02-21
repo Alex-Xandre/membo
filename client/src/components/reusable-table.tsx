@@ -1,5 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AvatarStack from '@/pages/dashboard-tenant/pages/events/avatar-stack';
 
 // Define the TableProps interface
 interface TableProps<T> {
@@ -16,15 +17,7 @@ interface TableProps<T> {
   tableHeader: ReactNode;
 }
 
-const ReusableTable = <T,>({
-  data,
-  columns,
-  caption,
-  onEdit,
-  onView,
-  title,
-  tableHeader,
-}: TableProps<T>): JSX.Element => {
+const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProps<T>): JSX.Element => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 12;
 
@@ -66,13 +59,25 @@ const ReusableTable = <T,>({
           ) : (
             currentRows.map((row, rowIndex) => (
               <TableRow key={rowIndex}>
-                {columns.map((column, columnIndex) => (
-                  <TableCell key={columnIndex}>
-                    {column.render
-                      ? column.render(row[column.accessor], row)
-                      : (row[column.accessor] as React.ReactNode)}
-                  </TableCell>
-                ))}
+                {columns.map((column, columnIndex) => {
+                  return (
+                    <TableCell key={columnIndex}>
+                      {column.accessor === 'users' ? (
+                        <>
+                          {row?.['users']?.length === 0 ? (
+                            <p>No attendees found</p>
+                          ) : (
+                            <AvatarStack avatars={row?.['users'] ?? []} />
+                          )}
+                        </>
+                      ) : column.render ? (
+                        column.render(row[column.accessor], row)
+                      ) : (
+                        (row[column.accessor] as React.ReactNode)
+                      )}
+                    </TableCell>
+                  );
+                })}
                 {onEdit && (
                   <TableCell>
                     <button

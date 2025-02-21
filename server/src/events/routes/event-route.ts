@@ -1,6 +1,6 @@
 import express from 'express';
 import protect from '../../middlewares/auth-protect';
-import { createEvent, getEventById, getEvents, newEvent } from '../controllers/event-controller';
+import { createEvent, getEventById, getEvents, getTransactions, newEvent } from '../controllers/event-controller';
 import stripeInstance from './stripe';
 
 const router = express.Router();
@@ -10,7 +10,7 @@ router.get('/events', protect, getEvents);
 router.get('/event/:id', protect, getEventById);
 
 router.post('/add-transaction', protect, createEvent);
-router.get('/transaction', protect, getEvents);
+router.get('/transaction', protect, getTransactions);
 router.post('/create-payment-intent', async (req, res) => {
   try {
     const { amount, currency } = req.body;

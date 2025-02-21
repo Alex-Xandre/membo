@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import { useEvent } from '@/stores/EventContext';
 import { useFetchAndDispatch } from '@/helpers/useFetch';
 import { getRandomCover } from '@/helpers/generate-default-img';
+import { EyeIcon } from 'lucide-react';
 
 const NewEvents = () => {
   const location = useParams();
@@ -109,8 +110,15 @@ const NewEvents = () => {
   };
   return (
     <>
-      <Breadcrumb items={breadcrumbItems} />
-
+      <header className='flex justify-between items-center'>
+        <Breadcrumb items={breadcrumbItems} />
+        {eventData._id !== '' && (
+          <Button>
+            <EyeIcon />
+            View List and Transactions
+          </Button>
+        )}
+      </header>
       <div className='w-full'>
         <FormContainer title='Event Information'>
           {eventForm.map((items) => (
@@ -155,7 +163,6 @@ const NewEvents = () => {
                 <Input
                   type={items.type}
                   onFocus={onFocus}
-             
                   name={items.name}
                   onChange={items.type === 'file' ? onFileChange : onInputChange}
                   value={items.type === 'file' ? undefined : (eventData[items.name] as keyof EventTypes as string)}

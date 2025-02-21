@@ -33,6 +33,12 @@ const EventReducer = (state: any, action: { type: string; payload?: any }): any 
         events: action.payload,
       };
 
+    case 'SET_TRANSACTIONS':
+      return {
+        ...state,
+        transaction: action.payload,
+      };
+
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import mongoose, { Schema, model } from 'mongoose';
 
 const transactionSchema = new Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: String,
     events: [
       {
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'Event', required: true },

@@ -5,15 +5,16 @@ import NavContainer from '@/components/ui/nav-container';
 import Title from '@/components/ui/title';
 import { PlusIcon } from 'lucide-react';
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import NewEvents from './new';
-import { getAllEvents } from '@/api/event.api';
+import { getAllEvents, getAllTransaction } from '@/api/event.api';
 import { useFetchAndDispatch } from '@/helpers/useFetch';
 import { useEvent } from '@/stores/EventContext';
+import { useAuth } from '@/stores/AuthContext';
 
 const TenantEvent = () => {
   const columns = [
-    { header: 'ID', accessor: '_id' },
+    { header: 'Attendees', accessor: 'users' },
     { header: 'Title', accessor: 'eventName' },
     { header: 'Event Type', accessor: 'eventType' },
     { header: 'Starting Date', accessor: 'eventStartDate' },
@@ -27,9 +28,46 @@ const TenantEvent = () => {
 
   const navigate = useNavigate();
   useFetchAndDispatch(getAllEvents, 'SET_EVENTS');
-  const params = useLocation();
-  const { events } = useEvent();
+  useFetchAndDispatch(getAllTransaction, 'SET_TRANSACTIONS');
 
+  const params = useLocation();
+  const tenant = useParams();
+
+  const { events, transaction } = useEvent();
+  const { allUser } = useAuth();
+  console.log(allUser);
+
+  const tenantTransactions = transaction
+    .filter((x) => x.tenantId === tenant?.tenantId)
+    .filter((x) => x.paymentStatus === 'completed')
+    .map((items) => {
+      return { items: items.events, userId: items._id };
+    })
+    .flat();
+
+  const placeholderAvatar = 'https://res.cloudinary.com/dyhsose70/image/upload/v1696562163/avatar_ko5htr.png';
+
+  const result = events.map((event) => {
+    const users = [];
+
+    tenantTransactions.forEach((transaction) => {
+      transaction.items.forEach((item) => {
+        if (item.id === event._id) {
+          const user = allUser.find((u) => u._id === transaction.userId);
+          users.push({ src: user ? user.profile : placeholderAvatar });
+
+          // Add placeholders for extra quantity
+          for (let i = 1; i < item.quantity; i++) {
+            users.push({ src: placeholderAvatar });
+          }
+        }
+      });
+    });
+
+    return { ...event, users };
+  });
+
+  console.log(result);
   if (params.search.includes('new')) {
     return <NewEvents />;
   }
@@ -45,7 +83,7 @@ const TenantEvent = () => {
         </Button>
       </NavContainer>
       <ReusableTable
-        data={events}
+        data={result}
         columns={columns as any}
         onEdit={(item) =>
           navigate(`${window.location.pathname}?view=events&new=${item?._id}`, { state: { isEdit: true } })

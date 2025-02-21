@@ -74,7 +74,7 @@ const App = () => {
     },
 
     {
-      path: '/:tenantId/events/checkout=true',
+      path: '/:tenantId/events/checkout',
       element: <CheckOutHome />,
     },
   ];

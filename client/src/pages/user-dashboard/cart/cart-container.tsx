@@ -53,7 +53,7 @@ const CartContainer = () => {
           <div className='w-full mt-5 justify-end flex'>
             <Button
               onClick={() => {
-                navigate(`${window.location.pathname}/checkout=true`, { state: { items: JSON.stringify(cart) } });
+                navigate(`${window.location.pathname}/checkout?cart=true`, { state: { items: JSON.stringify(cart) } });
                 toggleCart()
               }}
             >

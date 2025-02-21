@@ -33,6 +33,7 @@ export const registerTransaction = async (data: TransactionTypes) => {
 export const getAllTransaction = async () => {
   try {
     const response = await USER_API.get(`/api/event/transaction`);
+    console.log(response)
     return response.data;
   } catch (error) {
     return handleAxiosError(error);

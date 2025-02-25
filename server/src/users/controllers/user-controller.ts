@@ -147,7 +147,7 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
         role: user.role,
         _id: user._id,
         token,
-        tenantId: user?.tenantUserId?.tenantId
+        tenantId: user?.tenantUserId?.tenantId,
       });
     } else {
       res.status(500).json({ msg: 'Invalid Email or Password' });
@@ -212,7 +212,9 @@ export const getUser = expressAsyncHandler(async (req: CustomRequest, res) => {
 
 export const getAllUsers = async (req: CustomRequest, res) => {
   const allUser = await User.find({}).sort({ createdAt: -1 });
-  const filterUser = allUser.filter((x) => (x as any)._id.toString() !== req.user._id);
+  const filterUser = allUser
+    .filter((x) => (x as any)._id.toString() !== req.user._id)
+    ?.filter((x) => (req.user.role === 'tenant' ? x.tenantUserId.tenantId === req.user._id.toString() : x));
   res.status(200).json(filterUser);
 };
 

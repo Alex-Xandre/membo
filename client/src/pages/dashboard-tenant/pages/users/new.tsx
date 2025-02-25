@@ -76,6 +76,12 @@ const NewTenantUser = () => {
     }
   }, [allUser, item.search, state?.isEdit]);
 
+  useEffect(() => {
+    if (item?.pathname === '/profile/update') {
+      setUserData(user);
+    }
+  }, []);
+
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedUrl = await handleFileChange(e);
     if (uploadedUrl) {
@@ -143,7 +149,7 @@ const NewTenantUser = () => {
     <>
       <Breadcrumb items={breadcrumbItems} />
 
-      <div className='w-full pb-5'>
+      <div className={`w-full pb-5 overflow-auto  ${user.role === 'tenant' && 'h-[calc(100vh-100px)]'}`}>
         <FormContainer title='Account Information'>
           <img
             src={userData.profile ? userData.profile : 'https://placehold.co/400'}
@@ -155,39 +161,43 @@ const NewTenantUser = () => {
             }}
           />
 
-          {accountForm.map((items) => (
-            <div
-              key={items.name}
-              className='lg:w-[49%]'
-            >
-              <Label> {items.label}</Label>
+          {accountForm.map((items) => {
+            if (user.role === 'tenant' && (items.type === 'option')) {
+              return null;
+            }
+            return (
+              <div
+                key={items.name}
+                className='lg:w-[49%]'
+              >
+                <Label> {items.label}</Label>
 
-              {items.type === 'option' ? (
-                <SelectInput
-                  value={userData.role}
-                  onValueChange={(val) => {
-                    console.log(val);
-                    setUserData((prev) => ({
-                      ...prev,
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      ['role']: val as any,
-                    }));
-                  }}
-                  options={['tenant', 'user', ...(user.role === 'admin' ? ['admin'] : [])]}
-                  placeholder={'Account Access'}
-                />
-              ) : (
-                <Input
-                  type={items.type}
-                  ref={items.type === 'file' ? inputRef : null}
-                  name={items.name}
-                  className={`${items.type === 'file' && 'hidden'}`}
-                  onChange={items.type === 'file' ? onFileChange : onInputChange}
-                  value={items.type === 'file' ? undefined : (userData[items.name] as keyof UserTypes as string)}
-                />
-              )}
-            </div>
-          ))}
+                {items.type === 'option' && user.role === 'admin' ? (
+                  <SelectInput
+                    value={userData.role}
+                    onValueChange={(val) => {
+                      setUserData((prev) => ({
+                        ...prev,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        ['role']: val as any,
+                      }));
+                    }}
+                    options={['tenant', 'user', ...(user.role === 'admin' ? ['admin'] : [])]}
+                    placeholder={'Account Access'}
+                  />
+                ) : (
+                  <Input
+                    type={items.type}
+                    ref={items.type === 'file' ? inputRef : null}
+                    name={items.name}
+                    className={`${items.type === 'file' && 'hidden'}`}
+                    onChange={items.type === 'file' ? onFileChange : onInputChange}
+                    value={items.type === 'file' ? undefined : (userData[items.name] as keyof UserTypes as string)}
+                  />
+                )}
+              </div>
+            );
+          })}
         </FormContainer>
 
         <FormContainer title='Personal Information'>

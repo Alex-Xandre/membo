@@ -34,11 +34,11 @@ const TenantEvent = () => {
   const tenant = useParams();
 
   const { events, transaction } = useEvent();
-  const { allUser } = useAuth();
-  console.log(allUser);
+  const { allUser, user } = useAuth();
+
 
   const tenantTransactions = transaction
-    .filter((x) => x.tenantId === tenant?.tenantId)
+    .filter((x) => (user.role === 'tenant' ? x : x.tenantId === tenant?.tenantId))
     .filter((x) => x.paymentStatus === 'completed')
     .map((items) => {
       return { items: items.events, userId: items._id };
@@ -47,27 +47,29 @@ const TenantEvent = () => {
 
   const placeholderAvatar = 'https://res.cloudinary.com/dyhsose70/image/upload/v1696562163/avatar_ko5htr.png';
 
-  const result = events.map((event) => {
-    const users = [];
+  const result = events
+    .map((event) => {
+      const users = [];
 
-    tenantTransactions.forEach((transaction) => {
-      transaction.items.forEach((item) => {
-        if (item.id === event._id) {
-          const user = allUser.find((u) => u._id === transaction.userId);
-          users.push({ src: user ? user.profile : placeholderAvatar });
+      tenantTransactions.forEach((transaction) => {
+        transaction.items.forEach((item) => {
+          if (item.id === event._id) {
+            const user = allUser.find((u) => u._id === transaction.userId);
+            users.push({ src: user ? user.profile : placeholderAvatar });
 
-          // Add placeholders for extra quantity
-          for (let i = 1; i < item.quantity; i++) {
-            users.push({ src: placeholderAvatar });
+            // Add placeholders for extra quantity
+            for (let i = 1; i < item.quantity; i++) {
+              users.push({ src: placeholderAvatar });
+            }
           }
-        }
+        });
       });
-    });
 
-    return { ...event, users };
-  });
+      return { ...event, users };
+    })
+    .filter((x) => (user.role === 'tenant' ? x : x.createdBy === tenant?.tenantId));
 
-  console.log(result);
+
   if (params.search.includes('new')) {
     return <NewEvents />;
   }

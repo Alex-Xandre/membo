@@ -25,7 +25,7 @@ const TenantUsers = () => {
 
   const params = useLocation();
 
-  const { allUser } = useAuth();
+  const { allUser, user } = useAuth();
 
   if (params.search.includes('new')) {
     return <NewTenantUser />;
@@ -43,7 +43,9 @@ const TenantUsers = () => {
       </NavContainer>
       <ReusableTable
         data={allUser
-          .filter((item) => item.tenantUserId?.tenantId === params.pathname.substring(1))
+          .filter((item) =>
+            user.role === 'tenant' ? item : item.tenantUserId?.tenantId === params.pathname.substring(1)
+          )
           .map((x) => {
             return {
               ...x,

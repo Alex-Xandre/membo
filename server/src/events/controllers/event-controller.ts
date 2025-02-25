@@ -29,6 +29,8 @@ export const getEvents = async (req: CustomRequest, res: Response) => {
     const isAdmin =
       req.user.role === 'admin'
         ? events
+        : req.user.role === 'tenant'
+        ? events.filter((x) => x.createdBy.toString() === req.user._id.toString())
         : events.filter((x) => x.createdBy.toString() === (req.user as any).tenantUserId?.tenantId);
     res.status(200).json(isAdmin);
   } catch (error) {
@@ -77,6 +79,8 @@ export const getTransactions = async (req: CustomRequest, res: Response) => {
     const isAdmin =
       req.user.role === 'admin'
         ? transaction
+        : req.user.role === 'tenant'
+        ? transaction.filter((x) => x.tenantId.toString() === req.user._id.toString())
         : transaction.filter((x) => x.tenantId.toString() === (req.user as any).tenantUserId?.tenantId);
     res.status(200).json(isAdmin);
   } catch (error) {

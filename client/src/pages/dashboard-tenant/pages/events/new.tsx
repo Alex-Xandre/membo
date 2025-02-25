@@ -16,6 +16,8 @@ import { useEvent } from '@/stores/EventContext';
 import { useFetchAndDispatch } from '@/helpers/useFetch';
 import { getRandomCover } from '@/helpers/generate-default-img';
 import { EyeIcon } from 'lucide-react';
+import EventTransactions from './transaction-list';
+import { useAuth } from '@/stores/AuthContext';
 
 const NewEvents = () => {
   const location = useParams();
@@ -42,7 +44,7 @@ const NewEvents = () => {
       longitude: 0,
     },
     createdBy: '',
-    eventPrice: null,
+    eventPrice: 0,
   });
 
   const navigate = useNavigate();
@@ -76,12 +78,12 @@ const NewEvents = () => {
   };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    const sanitizedValue = value.replace(/^0+/, '') || ''; // Remove leading zeros
+    const { name, value, type } = e.target;
+    const sanitizedValue = value.replace(/^0+/, '') || '';
 
     setEventData((prev) => ({
       ...prev,
-      [name]: sanitizedValue === '' ? null : Number(sanitizedValue),
+      [name]: type === 'number' ? (sanitizedValue === '' ? null : Number(sanitizedValue)) : e.target.value,
     }));
   };
 
@@ -94,10 +96,12 @@ const NewEvents = () => {
     }
   };
 
+  const { user } = useAuth();
+
   const handleSubmit = async () => {
     const res = await registerEvents({
       ...eventData,
-      createdBy: location.tenantId,
+      createdBy: user.role === 'tenant' ? user._id : location.tenantId,
       eventBanner: eventData.eventBanner === '' ? getRandomCover() : eventData.eventBanner,
     });
 
@@ -108,12 +112,25 @@ const NewEvents = () => {
       navigate(-1);
     }, 1500);
   };
+
+  if (state?.isTransaction) {
+    return <EventTransactions />;
+  }
   return (
     <>
-      <header className='flex justify-between items-center'>
+      <header className='flex justify-between items-center w-full'>
         <Breadcrumb items={breadcrumbItems} />
         {eventData._id !== '' && (
-          <Button>
+          <Button
+            onClick={() => {
+              if (!item.search) return;
+              const searchParams = new URLSearchParams(item.search);
+              const myParamValue = searchParams.get('new');
+              navigate(`${window.location.pathname}?view=events&new=${myParamValue}&transaction`, {
+                state: { isTransaction: true },
+              });
+            }}
+          >
             <EyeIcon />
             View List and Transactions
           </Button>

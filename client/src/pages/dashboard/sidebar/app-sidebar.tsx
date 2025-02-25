@@ -64,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isDropdown: true,
       },
       {
-        title: 'Profile',
+        title: 'Profiles',
         url: '#',
         icon: UserIcon,
         items: [

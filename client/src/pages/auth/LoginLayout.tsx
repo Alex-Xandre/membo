@@ -38,7 +38,7 @@ const LoginLayout = () => {
     socket.emit('login', res._id);
 
     setTimeout(() => {
-      navigate(res.role === 'admin' ? '/' : `/${res.tenantId}`);
+      navigate(res.role !== 'user' ? '/' : `/${res.tenantId}`);
     }, 1500);
   };
 

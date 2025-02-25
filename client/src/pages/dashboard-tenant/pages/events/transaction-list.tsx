@@ -58,7 +58,7 @@ const EventTransactions = () => {
 
       setTransaction(findTransaction);
     }
-  }, [searchParams]);
+  }, []);
 
   const columns = [
     { header: 'Name', accessor: 'name' },
@@ -76,7 +76,7 @@ const EventTransactions = () => {
     }
   }, [activeTransaction]);
 
-  const event = events?.find((x) => x._id === searchParams.get('new')) ?? undefined;
+  const event = events?.find((x) => x._id === searchParams.get('new')) ?? {};
 
   const { eventStartDate = '', eventStartTime = '', eventEndDate = '', eventEndTime = '', eventName = '' } = event;
 
@@ -125,8 +125,13 @@ const EventTransactions = () => {
             id='transaction-view'
           ></Button>
         </DialogTrigger>
-        <DialogClose onClick={() => setTransaction(undefined)}></DialogClose>
-        <DialogContent className='w-1/2 h-2/3  flex flex-col content-start  '>
+
+        <DialogContent
+          className='w-1/2 h-2/3  flex flex-col content-start'
+          onClick={() => {
+            setTransaction(undefined);
+          }}
+        >
           <DialogHeader className='border-b pb-4'>
             <DialogTitle className='text-sm font-normal '>Transaction and Event Details </DialogTitle>
             {/* <DialogDescription>Anyone who has this link will be able to view this.</DialogDescription> */}

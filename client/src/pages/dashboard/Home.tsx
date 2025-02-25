@@ -6,7 +6,7 @@ import { useAuth } from '@/stores/AuthContext';
 import { Calendar1Icon, ExternalLink, FilterIcon, MapPin } from 'lucide-react';
 import { useEvent } from '@/stores/EventContext';
 import { useSidebar } from '@/components/ui/sidebar';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { ScrollArea, Scrollbar } from '@radix-ui/react-scroll-area';
 import { getEventTimeStatus } from '../dashboard-tenant/pages/events/format-date';
 import { accountForm, addressForm, personalForm } from '../dashboard-tenant/pages/users/forms-data';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -48,7 +48,7 @@ const Home = () => {
   // Calculate completeness per form
   const personalCompleteness = calculateFormCompleteness(personalForm, user.personalData);
   const accountCompleteness = calculateFormCompleteness(accountForm, user);
-  const addressCompleteness = calculateFormCompleteness(addressForm, user.personalData.address);
+  const addressCompleteness = calculateFormCompleteness(addressForm, user?.personalData?.address);
 
   // Final completeness score (average of all forms)
   const totalCompleteness = (personalCompleteness + accountCompleteness + addressCompleteness) / 3;

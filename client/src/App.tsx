@@ -1,7 +1,7 @@
 import React, { Suspense, useCallback, useContext, useEffect } from 'react';
 import LoginLayout from './pages/auth/LoginLayout';
 import Home from './pages/dashboard/Home';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useAuth } from './stores/AuthContext';
 import NotFound from './helpers/not-found';
 import { SocketContext } from './stores/SocketContext';
@@ -12,9 +12,7 @@ import { AppSidebar } from './pages/dashboard/sidebar/app-sidebar';
 import RegisterLayout from './pages/auth/RegisterLayout';
 import { AppSidebarAdmin } from './pages/dashboard/sidebar/main-admin-sidebar';
 import TenantHome from './pages/dashboard-tenant/TenantHome';
-import { useFetchAndDispatch } from './helpers/useFetch';
 import TenantUsers from './pages/dashboard-tenant/pages/users';
-import { useSidebar } from './components/ui/sidebar';
 import Container from './components/container';
 import EventHomeUser from './pages/user-dashboard/user-event';
 import { useCartStore } from './pages/user-dashboard/cart/cart-store';
@@ -28,10 +26,6 @@ import Profile from './pages/dashboard-tenant/pages/profile';
 const App = () => {
   const { isLoggedIn, user, dispatch } = useAuth();
   const { socket } = useContext(SocketContext);
-  const { open } = useSidebar();
-
-  const navigate = useNavigate();
-  const location = useLocation();
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token) {

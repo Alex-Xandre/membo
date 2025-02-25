@@ -76,7 +76,7 @@ const EventTransactions = () => {
     }
   }, [activeTransaction]);
 
-  const event = events?.find((x) => x._id === searchParams.get('new')) ?? {};
+  const event = events?.find((x) => x._id === searchParams.get('new')) ?? undefined;
 
   const { eventStartDate = '', eventStartTime = '', eventEndDate = '', eventEndTime = '', eventName = '' } = event;
 

@@ -20,7 +20,7 @@ const ProfileView = () => {
         />
         <div>
           <h1 className='font-semibold  text-sm'>
-            {user.personalData.firstName} {user.personalData.lastName}
+            {user.personalData?.firstName} {user.personalData?.lastName}
           </h1>
           <p className='text-gray-600'>
             {user.personalData.civilStatus} • {user.personalData.sex}

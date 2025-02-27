@@ -6,6 +6,8 @@ import { useSidebar } from '@/components/ui/sidebar';
 import TenantUsers from './pages/users';
 import TenantEvent from './pages/events';
 import { useAuth } from '@/stores/AuthContext';
+import ProfileView from './pages/profile';
+import NewTenantUser from './pages/users/new';
 
 const TenantHome = () => {
   const params = useLocation();
@@ -44,6 +46,7 @@ const TenantHome = () => {
         <div className={`flex-grow h-full px-5 ${user.role==="admin" && "ml-72"}`}>
           {activeIndex === 1 && <TenantUsers />}
           {activeIndex === 2 && <TenantEvent />}
+          {activeIndex === 3 && <NewTenantUser />}
         </div>
       </section>
     </Container>

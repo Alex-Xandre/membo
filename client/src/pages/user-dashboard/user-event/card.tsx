@@ -18,7 +18,7 @@ const EventListByMonth: React.FC<EventListByMonthProps> = ({ events }) => {
     const date = new Date(event.eventStartDate);
     const month = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
     if (!groupedEvents[month]) groupedEvents[month] = [];
-    groupedEvents[month].push(event);
+    groupedEvents[month].push(event as any);
   });
 
   return (

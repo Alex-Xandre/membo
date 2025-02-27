@@ -178,6 +178,10 @@ const RegisterLayout: React.FC = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const tenant = urlParams.get('tenant');
 
+    if (!tenant) {
+      return toast.error('Something went wrong');
+    }
+
     const res = await registerUser({
       ...accData,
       personalData: data,
@@ -215,16 +219,20 @@ const RegisterLayout: React.FC = () => {
                 Please fill in the required fields
               </p>
             </div>
-            <div className='space-y-4'>
+            <div className='flex-wrap flex gap-2 content-start'>
               {steps[currentStep].fields.map((field) => (
-                <div key={field.name}>
-                  <Label
-                    htmlFor={field.name}
-                    className='text-sm text-muted-foreground'
-                  >
-                    {field.label}
-                  </Label>
-                  <div className='mt-1'>
+                <div
+                  className={`${currentStep === 0 && '!w-[49%]'} w-full`}
+                  key={field.name}
+                >
+                  <div className=''>
+                    <Label
+                      htmlFor={field.name}
+                      className='text-sm text-muted-foreground'
+                    >
+                      {field.label}
+                    </Label>
+
                     <Input
                       id={field.name}
                       name={field.name}
@@ -241,7 +249,9 @@ const RegisterLayout: React.FC = () => {
                           )
                         ) : null
                       }
-                      className={`${errors[field.name] ? 'border-red-500' : ''}`}
+                      className={`${errors[field.name] ? 'border-red-500' : ''}
+                      
+                      `}
                     />
                     {errors[field.name] && <p className='text-xs text-red-500 ml-1 mt-1'>{errors[field.name]}</p>}
                   </div>

@@ -82,6 +82,7 @@ export interface TransactionEvent {
   quantity: number;
 }
 export interface TransactionTypes {
+  name?: any;
   _id?: string;
   userId: string;
   events: TransactionEvent[];

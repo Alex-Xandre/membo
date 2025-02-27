@@ -151,6 +151,7 @@ const EventTransactions = () => {
               <p className='w-1/4 inline-flex items-center gap-x-3'>
                 <PersonStandingIcon className='h-4' /> User{' '}
               </p>
+              
               <p>{activeTransaction?.name}</p>
               {!activeTransaction && (
                 <AvatarStack avatars={result.find((x) => x._id === searchParams.get('new'))?.users ?? []} />

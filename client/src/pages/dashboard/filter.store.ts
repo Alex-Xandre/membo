@@ -10,7 +10,7 @@ interface FiltersState {
   lessThan10: boolean;
   lessThan100: boolean;
   lessThan1000: boolean;
-  updateFilter: (key: keyof FiltersState) => void;
+  updateFilter: (key: any) => void;
 }
 
 export const useFilterStore = create<FiltersState>((set) => ({

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getAllEvents, getAllTransaction } from '@/api/event.api';
 import { getAllUser } from '@/api/get.info.api';
 import Breadcrumb from '@/components/bread-crumb';

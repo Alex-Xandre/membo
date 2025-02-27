@@ -67,8 +67,6 @@ const Home = () => {
 
   return (
     <Container>
-      {user.role === 'admin' && <Button onClick={() => navigate('/tenant')}>add tenant user</Button>}
-
       {/* Left panel */}
       <section
         className={` p-3 w-1/4 2xl:w-1/6 bg-[#f7f8fc] h-screen overflow-y-hidden pb-24 absolute -top-4 ${
@@ -221,7 +219,10 @@ const Home = () => {
         </ScrollArea>
       </section>
 
-      {/* <ScrollArea className='bg-red-100 flex-1'>h</ScrollArea> */}
+      <ScrollArea className=' flex-1 ml-60'>
+        {' '}
+        {user.role === 'admin' && <Button onClick={() => navigate('/tenant')}>add tenant user</Button>}
+      </ScrollArea>
     </Container>
   );
 };

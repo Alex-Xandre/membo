@@ -53,11 +53,7 @@ const App = () => {
     { path: '/', element: <Home /> },
     {
       path: '/tenant',
-      element: (
-        <Container>
-          <TenantUsers />
-        </Container>
-      ),
+      element: <TenantUsers />,
     },
     { path: '/:tenantId', element: <TenantHome /> },
   ];

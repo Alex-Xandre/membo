@@ -128,6 +128,7 @@ const NewTenantUser = () => {
   const { dispatch } = useAuth();
 
   const handleSubmit = async () => {
+ 
     const res = await registerUserByAdmin({
       ...userData,
       password: new Date(userData.personalData.birthday as string).toISOString().split('T')[0],
@@ -149,7 +150,7 @@ const NewTenantUser = () => {
     <>
       <Breadcrumb items={breadcrumbItems} />
 
-      <div className={`w-full pb-5 overflow-auto  ${user.role === 'tenant' && 'h-[calc(100vh-100px)]'}`}>
+      <div className={`w-full pb-5 overflow-y-auto h-[calc(100vh-200px)]`}>
         <FormContainer title='Account Information'>
           <img
             src={userData.profile ? userData.profile : 'https://placehold.co/400'}

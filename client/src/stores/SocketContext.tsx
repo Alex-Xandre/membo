@@ -1,6 +1,6 @@
-import { API_ENDPOINT } from '@/config/API';
 import { createContext } from 'react';
 import { Socket, io } from 'socket.io-client';
+import { API_ENDPOINT } from '../config/API';
 
 interface SocketContextValue {
   socket: Socket;

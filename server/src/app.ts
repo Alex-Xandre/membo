@@ -17,14 +17,18 @@ const port = 5000;
 const server = createServer(app);
 
 const corsOptions = {
-  origin: ['http://localhost:5173',"https://membo-nine.vercel.app"],
+  origin: ['http://localhost:5173', 'https://membo-nine.vercel.app'],
 };
 
 const io = new Server(server, {
   cors: {
-    origin: corsOptions.origin,
+    origin: ['http://localhost:5173', 'https://membo-nine.vercel.app'],
+    methods: ['GET', 'POST'],
+    credentials: true,
   },
+  transports: ['websocket', 'polling'],
 });
+
 
 app.use((req, res, next) => {
   (req as Request & { io: Server }).io = io;
@@ -39,6 +43,8 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '5000mb', extended: true }));

@@ -186,10 +186,9 @@ const RegisterLayout: React.FC = () => {
 
   return (
     <main className='w-full h-screen flex'>
-      <section className='w-1/2 flex justify-center items-center'>{/* Add any additional content */}</section>
-      <section className='w-1/2 px-6 bg-muted shadow-lg rounded-lg flex justify-center items-center relative flex-col'>
+      <section className='w-full px-6 bg-muted shadow-lg rounded-lg flex justify-center items-center relative flex-col'>
         {currentStep === 3 ? (
-          <div className='w-2/3 p-5 shadow-md rounded-lg bg-white  '>
+          <div className='w-1/2 p-5 shadow-md rounded-lg bg-white  '>
             <h1 className='text-xl font-semibold'>OTP Code</h1>
             <p className='text-xs mt-2 mb-5 items-center inline-flex gap-x-2'>
               Please check your email for activation code
@@ -198,7 +197,7 @@ const RegisterLayout: React.FC = () => {
             <ActivationCodeLayout />
           </div>
         ) : (
-          <div className='w-2/3 px-5 pb-5 shadow-md rounded-lg bg-white max-h-[80%] overflow-y-auto '>
+          <div className='w-1/2 px-5 pb-5 shadow-md rounded-lg bg-white max-h-[80%] overflow-y-auto '>
             <div className='sticky top-0 bg-white z-20  pt-5'>
               <h1 className='text-xl font-semibold'>{steps[currentStep].title}</h1>
               <p className='text-xs mt-2 mb-5 items-center inline-flex gap-x-2'>

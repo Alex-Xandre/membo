@@ -170,17 +170,27 @@ const RegisterLayout: React.FC = () => {
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     // Validate password
     const isPasswordValid = validatePassword();
     if (!isPasswordValid) return;
 
-    const res = await registerUser(accData);
+    const urlParams = new URLSearchParams(window.location.search);
+    const tenant = urlParams.get('tenant');
+
+    const res = await registerUser({
+      ...accData,
+      personalData: data,
+      tenantUserId: {
+        tenantId: tenant,
+        tenantRole: 'user',
+      },
+    });
 
     if (res.success === false) return toast.error(res.data?.msg || 'Error');
     toast.success('Please Check your email fo activation');
-    setCurrentStep(3)
-    console.log(res)
+    setCurrentStep(3);
+    console.log(res);
     navigate(`/register?token=${res?.link}`);
   };
 

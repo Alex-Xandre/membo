@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+      {
+        "source": "/api/(.*)",
+        "destination": "https://membo-be.onrender.com/api/$1"
+      }
+    ]
+  }
+  

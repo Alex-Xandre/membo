@@ -59,6 +59,8 @@ const NewTenantUser = () => {
   });
 
   const item = useLocation();
+
+  const params = useParams();
   const { state } = item;
 
   useFetchAndDispatch(getAllUser, 'GET_ALL_USER');
@@ -75,6 +77,18 @@ const NewTenantUser = () => {
       setUserData({ ...items, personalData: items.personalData });
     }
   }, [allUser, item.search, state?.isEdit]);
+
+  useEffect(() => {
+    if (params?.tenantId) {
+      const searchParams = params?.tenantId;
+
+      if (!searchParams) return;
+      const items = allUser.find((x) => x._id === searchParams) as UserTypes;
+      if (!items) return;
+
+      setUserData({ ...items, personalData: items.personalData });
+    }
+  }, [allUser, params]);
 
   useEffect(() => {
     if (item?.pathname === '/profile/update') {
@@ -128,7 +142,6 @@ const NewTenantUser = () => {
   const { dispatch } = useAuth();
 
   const handleSubmit = async () => {
- 
     const res = await registerUserByAdmin({
       ...userData,
       password: new Date(userData.personalData.birthday as string).toISOString().split('T')[0],
@@ -163,7 +176,7 @@ const NewTenantUser = () => {
           />
 
           {accountForm.map((items) => {
-            if (user.role === 'tenant' && (items.type === 'option')) {
+            if (user.role === 'tenant' && items.type === 'option') {
               return null;
             }
             return (

@@ -97,7 +97,7 @@ export function TenantSidebar() {
   };
 
   return (
-    <SidebarProvider className='items-start z-10'>
+    <SidebarProvider className='items-start z-50'>
       <Sidebar
         collapsible='none'
         className='hidden md:flex'

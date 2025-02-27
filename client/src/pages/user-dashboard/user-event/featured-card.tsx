@@ -4,6 +4,7 @@ import { EyeIcon, PartyPopper, ShoppingCart, Trash } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '../cart/cart-store';
+import { getRandomCover } from '@/helpers/generate-default-img';
 
 interface EventCardProps {
   event: EventTypes;
@@ -25,7 +26,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
   return (
     <div className='p-4 rounded-lg shadow-xs bg-white relative hover:-mt-3 hover:shadow-md transition-all duration-100 ease-in-out'>
       {event.eventIsFeatured && (
-        <div className='absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded'>
+        <div className='absolute -top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded'>
           Featured
         </div>
       )}
@@ -37,7 +38,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
       )}
 
       <img
-        src={eventBanner}
+        src={eventBanner.includes('example.com') ? getRandomCover() : eventBanner}
         alt={eventName}
         className='w-full h-40 object-cover rounded-md'
       />

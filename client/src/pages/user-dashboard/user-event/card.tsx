@@ -24,7 +24,7 @@ const EventListByMonth: React.FC<EventListByMonthProps> = ({ events }) => {
   return (
     <div className='space-y-6  pt-2'>
       <h1 className=''>Upcoming Events</h1>
-      {Object.entries(groupedEvents).map(([month, events]) => (
+      {Object.entries(groupedEvents).reverse().map(([month, events]) => (
         <div
           key={month}
           className='flex flex-col space-y-4'

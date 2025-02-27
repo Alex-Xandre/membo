@@ -86,7 +86,7 @@ export function TenantSidebar() {
   };
 
   const handleNavigation = (url) => {
-    console.log(url);
+
     if (url === params.pathname) return;
 
     if (url === '#') {

@@ -44,7 +44,7 @@ const LoginLayout = () => {
 
   return (
     <main className='w-full h-screen flex'>
-      
+      <button onClick={() => navigate("67c33af063beda2464d27849")}>login as cfc</button>
       <section className=' w-full p-6 bg-muted shadow-lg rounded-lg flex justify-center items-center'>
         <div className='w-1/3  p-5   shadow-md rounded-lg bg-white'>
           <h1 className='text-xl  font-semibold'>Login Account</h1>

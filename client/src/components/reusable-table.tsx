@@ -80,9 +80,9 @@ const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProp
                         <div className='inline-flex items-center gap-x-3'>
                           <img
                             className='h-4 rounded-full w-4'
-                            src={row?.profile !== '' ? row?.profile : placeholderAvatar}
+                            src={(row as any)?.profile !== '' ? (row as any?.profile : placeholderAvatar}
                           />
-                          {row?.user}
+                          {(row as any?.user}
                         </div>
                       ) :
                       column.render ? (

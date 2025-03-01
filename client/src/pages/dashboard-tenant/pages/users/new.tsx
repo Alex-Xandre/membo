@@ -149,7 +149,7 @@ const NewTenantUser = () => {
       password: new Date(userData.personalData.birthday as string).toISOString().split('T')[0],
       tenantUserId: {
         tenantId: user.role === 'tenant' ? user._id : location.tenantId,
-        tenantRole: userData.role,
+        tenantRole: user.role === 'tenant' ? 'user' : 'tenant',
       },
     });
 
@@ -178,7 +178,7 @@ const NewTenantUser = () => {
           />
 
           {accountForm.map((items) => {
-            if (user.role === 'tenant' && items.type === 'option' && items.name === "accountId" ) {
+            if (user.role === 'tenant' && items.type === 'option' && items.name === 'accountId') {
               return null;
             }
             return (

@@ -9,5 +9,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "./", // Change "/" to "./" to fix blank page issue on Vercel
+  base: "./", // Ensures assets load correctly on Vercel
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+  },
 });

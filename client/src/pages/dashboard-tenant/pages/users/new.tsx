@@ -78,10 +78,10 @@ const NewTenantUser = () => {
     }
   }, [allUser, item.search, state?.isEdit]);
 
-  console.log(item)
+  console.log(item);
 
   useEffect(() => {
-    if (params?.tenantId && item.search === "?view=profile") {
+    if (params?.tenantId && item.search === '?view=profile') {
       const searchParams = params?.tenantId;
 
       if (!searchParams) return;
@@ -148,7 +148,7 @@ const NewTenantUser = () => {
       ...userData,
       password: new Date(userData.personalData.birthday as string).toISOString().split('T')[0],
       tenantUserId: {
-        tenantId: location.tenantId,
+        tenantId: user.role === 'tenant' ? user._id : location.tenantId,
         tenantRole: userData.role,
       },
     });

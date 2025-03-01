@@ -23,9 +23,7 @@ import {
   SheetDescription,
   SheetFooter,
   SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+  SheetTitle,} from '@/components/ui/sheet';
 import { useCartStore } from '../cart/cart-store';
 
 const EventHomeUser = () => {

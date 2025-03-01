@@ -53,7 +53,9 @@ const App = () => {
     { path: '/', element: <Home /> },
     {
       path: '/tenant',
-      element: <TenantUsers />,
+      element: <div className='relative ml-16 mt-16 pr-4'>
+        <TenantUsers />,
+      </div>
     },
     { path: '/:tenantId', element: <TenantHome /> },
   ];

@@ -29,7 +29,7 @@ const NewTenantUser = () => {
 
   const [userData, setUserData] = useState<UserTypes>({
     password: '',
-    role: 'tenant',
+    role: 'user',
     userId: '',
     _id: '',
     email: '',

@@ -14,9 +14,9 @@ const TenantUsers = () => {
   const navigate = useNavigate();
 
   const columns = [
-    { header: 'ID', accessor: '_id' },
     { header: 'User', accessor: 'user' },
     { header: 'Role', accessor: 'role' },
+    { header: 'Status', accessor: 'isOnline' },
   ];
 
   const breadcrumbItems = [

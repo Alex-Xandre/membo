@@ -60,8 +60,13 @@ const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProp
             currentRows.map((row, rowIndex) => (
               <TableRow key={rowIndex}>
                 {columns.map((column, columnIndex) => {
+                  const placeholderAvatar =
+                    'https://res.cloudinary.com/dyhsose70/image/upload/v1696562163/avatar_ko5htr.png';
+
+                  console.log(row);
                   return (
-                    <TableCell key={columnIndex}>
+                    <TableCell key={columnIndex} className=''>
+                     
                       {column.accessor === 'users' ? (
                         <>
                           {row?.['users']?.length === 0 ? (
@@ -70,7 +75,17 @@ const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProp
                             <AvatarStack avatars={row?.['users'] ?? []} />
                           )}
                         </>
-                      ) : column.render ? (
+                      ) :
+                      column.accessor === 'user' ? (
+                        <div className='inline-flex items-center gap-x-3'>
+                          <img
+                            className='h-4 rounded-full w-4'
+                            src={row?.profile !== '' ? row?.profile : placeholderAvatar}
+                          />
+                          {row?.user}
+                        </div>
+                      ) :
+                      column.render ? (
                         column.render(row[column.accessor], row)
                       ) : (
                         (row[column.accessor] as React.ReactNode)

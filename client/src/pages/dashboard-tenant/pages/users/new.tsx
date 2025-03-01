@@ -156,6 +156,9 @@ const NewTenantUser = () => {
     if (res.success === false) return toast.error(res.data?.msg || 'Error');
     toast.success(res.msg);
 
+    const fetchUsers = await getAllUser();
+    dispatch({ type: 'GET_ALL_USER', payload: fetchUsers.filter((user) => user.role !== 'admin') });
+    
     setTimeout(() => {
       navigate(-1);
     }, 1500);

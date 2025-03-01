@@ -9,5 +9,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "/", // Ensure Vite serves assets correctly in production
+  base: "./", // Change "/" to "./" to fix blank page issue on Vercel
 });

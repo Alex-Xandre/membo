@@ -5,10 +5,11 @@
       "destination": "https://membo-be.onrender.com/api/$1"
     }
   ],
-  "routes": [
+  "redirects": [
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html",
+      "statusCode": 200
     }
   ]
 }

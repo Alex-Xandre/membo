@@ -65,8 +65,10 @@ const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProp
 
                   console.log(row);
                   return (
-                    <TableCell key={columnIndex} className=''>
-                     
+                    <TableCell
+                      key={columnIndex}
+                      className=''
+                    >
                       {column.accessor === 'users' ? (
                         <>
                           {row?.['users']?.length === 0 ? (
@@ -75,17 +77,15 @@ const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProp
                             <AvatarStack avatars={row?.['users'] ?? []} />
                           )}
                         </>
-                      ) :
-                      column.accessor === 'user' ? (
+                      ) : column.accessor === 'user' ? (
                         <div className='inline-flex items-center gap-x-3'>
                           <img
                             className='h-4 rounded-full w-4'
-                            src={(row as any)?.profile !== '' ? (row as any?.profile : placeholderAvatar}
+                            src={(row as any)?.profile !== '' ? (row as any)?.profile : placeholderAvatar}
                           />
-                          {(row as any?.user}
+                          {(row as any)?.user}
                         </div>
-                      ) :
-                      column.render ? (
+                      ) : column.render ? (
                         column.render(row[column.accessor], row)
                       ) : (
                         (row[column.accessor] as React.ReactNode)

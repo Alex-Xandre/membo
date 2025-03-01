@@ -155,7 +155,7 @@ const NewTenantUser = () => {
 
     if (res.success === false) return toast.error(res.data?.msg || 'Error');
     toast.success(res.msg);
-    dispatch({ type: 'ADD_USER', payload: res });
+
     setTimeout(() => {
       navigate(-1);
     }, 1500);
@@ -178,7 +178,7 @@ const NewTenantUser = () => {
           />
 
           {accountForm.map((items) => {
-            if (user.role === 'tenant' && (items.type === 'option'  || items.name === 'accountId')) {
+            if (user.role === 'tenant' && (items.type === 'option' || items.name === 'accountId')) {
               return null;
             }
             return (

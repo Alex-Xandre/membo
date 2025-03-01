@@ -4,10 +4,11 @@ import { Button } from '@/components/ui/button';
 import NavContainer from '@/components/ui/nav-container';
 import Title from '@/components/ui/title';
 import { PlusIcon } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NewTenantUser from './new';
 import { useAuth } from '@/stores/AuthContext';
+import { getAllUser } from '@/api/get.info.api';
 
 const TenantUsers = () => {
   const navigate = useNavigate();
@@ -25,7 +26,19 @@ const TenantUsers = () => {
 
   const params = useLocation();
 
-  const { allUser, user } = useAuth();
+  const { allUser, user, dispatch } = useAuth();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      const handlegetInfo = async () => {
+        const fetchUsers = await getAllUser();
+
+        dispatch({ type: 'GET_ALL_USER', payload: fetchUsers.filter((user) => user.role !== 'admin') });
+      };
+      handlegetInfo();
+    }
+  }, [dispatch]);
 
   if (params.search.includes('new')) {
     return <NewTenantUser />;

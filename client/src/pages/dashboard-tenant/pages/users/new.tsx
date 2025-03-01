@@ -178,7 +178,7 @@ const NewTenantUser = () => {
           />
 
           {accountForm.map((items) => {
-            if (user.role === 'tenant' && items.type === 'option') {
+            if (user.role === 'tenant' && items.type === 'option' && items.name === "accountId" ) {
               return null;
             }
             return (

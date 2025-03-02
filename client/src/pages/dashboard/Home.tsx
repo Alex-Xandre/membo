@@ -45,8 +45,8 @@ const Home = () => {
             <RIghtPanelHeader />
           </header>
 
-          <div className='ml-3  flex-grow  flex '>
-            <div className='w-[82%]'>
+          <div className='ml-3  w-full  flex '>
+            <div className='w-3/4'>
               <div className=' mt-3 bg-white  '>
                 <div className='rounded shadow p-5'>
                   <TicketChart />
@@ -67,7 +67,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className='w-[15.5rem] ml-3 mt-3'>
+            <div className='!w-[15.5rem] ml-4 mt-3 flex-shrink-0'>
               <div className='bg-white shadow-sm pb-3'>
                 <CalendarDemo />
               </div>

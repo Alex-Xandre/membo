@@ -9,6 +9,7 @@ import { PersonalTypes, UserTypes } from '@/helpers/types';
 import ActivationCodeLayout from './ActivateLayout';
 import { registerUser } from '@/api/register.api';
 import toast from 'react-hot-toast';
+import useBaseNameStore from '@/stores/useThemeAndRoute';
 
 const RegisterLayout: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -48,6 +49,7 @@ const RegisterLayout: React.FC = () => {
     confirmPassword: '',
   });
 
+  const baseName = useBaseNameStore((state:any) => state.basename);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const steps = [
@@ -186,7 +188,7 @@ const RegisterLayout: React.FC = () => {
       ...accData,
       personalData: data,
       tenantUserId: {
-        tenantId: tenant,
+        tenantId: baseName._id,
         tenantRole: 'user',
       },
     });

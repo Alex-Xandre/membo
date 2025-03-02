@@ -1,7 +1,7 @@
-import React, { Suspense, useCallback, useContext, useEffect } from 'react';
+import { Suspense, useCallback, useContext, useEffect } from 'react';
 import LoginLayout from './pages/auth/LoginLayout';
 import Home from './pages/dashboard/Home';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from './stores/AuthContext';
 import NotFound from './helpers/not-found';
 import { SocketContext } from './stores/SocketContext';
@@ -22,10 +22,12 @@ import TenantEvent from './pages/dashboard-tenant/pages/events';
 import { TenantMainSidebar } from './pages/dashboard-tenant/sidebar/main-tenant-sidebar';
 import NewTenantUser from './pages/dashboard-tenant/pages/users/new';
 import Profile from './pages/dashboard-tenant/pages/profile';
+import useBaseNameStore from './stores/useThemeAndRoute';
 
 const App = () => {
   const { isLoggedIn, user, dispatch } = useAuth();
   const { socket } = useContext(SocketContext);
+
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -38,24 +40,22 @@ const App = () => {
         dispatch({ type: 'SIGNING', payload: res });
         dispatch({ type: 'GET_ALL_USER', payload: fetchUsers.filter((user) => user.role !== 'admin') });
         socket.emit('login', res._id);
-
-        // if (location.pathname === '/') {
-        //   setTimeout(() => {
-        //     navigate(res.role !== 'user' ? '/' : `/${res.tenantUserId?.tenantId}`);
-        //   }, 1500);
-        // }
       };
       handlegetInfo();
     }
   }, [dispatch, isLoggedIn]);
 
+  const baseName = useBaseNameStore((state:any) => state.basename);
+
   const adminRoutes = [
     { path: '/', element: <Home /> },
     {
       path: '/tenant',
-      element: <div className='relative ml-16 mt-16 pr-4'>
-        <TenantUsers />,
-      </div>
+      element: (
+        <div className='relative ml-16 mt-16 pr-4'>
+          <TenantUsers />,
+        </div>
+      ),
     },
     { path: '/:tenantId', element: <TenantHome /> },
   ];
@@ -171,6 +171,11 @@ const App = () => {
   }, [isLoggedIn, user]);
 
   const isOpen = useCartStore((state) => state.isOpen);
+  const location = useLocation();
+  if (location.pathname !== '/' && baseName === null && !isLoggedIn) {
+    return <NotFound />;
+  }
+
   return (
     <div className='  overflow-y-hidden overflow-x-hidden h-[100dvh] w-screen '>
       <Toaster position='top-right' />

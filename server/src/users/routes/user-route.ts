@@ -8,6 +8,7 @@ import {
   registerUser,
   registerUserByAdmin,
   validateSession,
+  getRoute,
 } from '../controllers/user-controller';
 import protect from '../../middlewares/auth-protect';
 
@@ -19,9 +20,8 @@ router.delete('/logout', logoutUser);
 router.post('/activate', activate);
 router.get('/user', protect, getUser);
 router.get('/all-user', protect, getAllUsers);
-
+router.get('/base-url/:id', getRoute);
 
 router.get('/validate-session', validateSession);
-
 
 export default router;

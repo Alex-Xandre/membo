@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/stores/AuthContext';
 import { SocketContext } from '@/stores/SocketContext';
+import useBaseNameStore from '@/stores/useThemeAndRoute';
 import { EyeClosedIcon, EyeIcon, UserIcon } from 'lucide-react';
 import { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -24,12 +25,16 @@ const LoginLayout = () => {
   const navigate = useNavigate();
   const { socket } = useContext(SocketContext);
   const location = useParams();
+  const baseName = useBaseNameStore((state:any) => state.basename);
+  
   const handleSubmit = async () => {
     const res = await loginUser(data);
 
     if (res.success === false) return toast.error(res.data?.msg || 'Error');
 
-    if (res.role !== 'admin' && location?.tenantId !== res?.tenantId) {
+
+    console.log(baseName)
+    if (res.role === 'user' && baseName?._id !== res?.tenantId) {
       return toast.error('Account Error');
     }
 
@@ -44,7 +49,7 @@ const LoginLayout = () => {
 
   return (
     <main className='w-full h-screen flex'>
-      <button onClick={() => navigate("67c33af063beda2464d27849")}>login as cfc</button>
+      
       <section className=' w-full p-6 bg-muted shadow-lg rounded-lg flex justify-center items-center'>
         <div className='w-1/3  p-5   shadow-md rounded-lg bg-white'>
           <h1 className='text-xl  font-semibold'>Login Account</h1>

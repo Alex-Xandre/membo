@@ -255,3 +255,26 @@ export const registerUserByAdmin = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 });
+
+export const getRoute = expressAsyncHandler(async (req: any, res: any) => {
+  try {
+    const id = req.params.id.toLowerCase();
+
+    const baseUrl = await User.findOne(
+      { accountId: { $regex: `^${id}$`, $options: 'i' }, role: 'tenant' },
+      { accountId: 1, role: 1, _id: 1 }
+    );
+
+    if (!baseUrl) {
+      return res.status(404).json({ message: 'Tenant not found' });
+    }
+
+    res.json({
+      _id: baseUrl._id,
+      accountId: baseUrl.accountId,
+      role: baseUrl.role.toLowerCase(),
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});

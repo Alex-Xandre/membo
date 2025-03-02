@@ -23,7 +23,7 @@ const AvatarStack: React.FC<AvatarStackProps> = ({ avatars, maxVisible = 4 }) =>
       ))}
       {avatars.length > maxVisible && (
         <a
-          className="flex items-center justify-center w-8 2-8 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800"
+          className="flex items-center justify-center w-8 h-8 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800"
           href="#"
         >
           +{avatars.length - maxVisible}

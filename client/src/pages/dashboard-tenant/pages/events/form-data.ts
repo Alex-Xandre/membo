@@ -51,4 +51,10 @@ export const eventForm = [
     label: 'Purchase Price',
     type: 'number',
   },
+
+  {
+    name: 'maxAttendees',
+    label: 'Max Attendees (optional) ',
+    type: 'number',
+  },
 ];

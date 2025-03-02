@@ -9,6 +9,7 @@ import Session from '../models/session-model';
 import { sendRegistration } from '../../helpers/sendMail';
 import { activationToken, generateToken } from '../../middlewares/jwt-functions';
 import { CustomRequest } from '../../types';
+import { userSocketMap } from '../../middlewares/socket-handler';
 
 //register and update
 export const registerUser = expressAsyncHandler(async (req, res) => {
@@ -78,7 +79,6 @@ export const activate = expressAsyncHandler(async (req, res) => {
 
     const user = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN);
 
-    console.log(user);
     if (!user) {
       res.status(400);
       throw new Error('Invalid Token');
@@ -131,6 +131,10 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
     if (!user) res.status(400).json({ msg: 'User not Found' });
 
     if (user && (await bcrypt.compare(password, user.password))) {
+      if (user?.status && !user.status) {
+        res.status(401).json({ msg: 'Account not active' });
+      }
+
       // Invalidate all previous sessions for this user
       await Session.deleteMany({ user: user._id });
 
@@ -210,12 +214,25 @@ export const getUser = expressAsyncHandler(async (req: CustomRequest, res) => {
   }
 });
 
-export const getAllUsers = async (req: CustomRequest, res) => {
-  const allUser = await User.find({}).sort({ createdAt: -1 });
-  const filterUser = allUser
-    .filter((x) => (x as any)._id.toString() !== req.user._id)
-    ?.filter((x) => (req.user.role === 'tenant' ? x.tenantUserId.tenantId === req.user._id.toString() : x));
-  res.status(200).json(filterUser);
+export const getAllUsers = async (req: CustomRequest, res: Response) => {
+  try {
+    const allUsers = await User.find({}).sort({ createdAt: -1 });
+
+    const filteredUsers = allUsers
+
+      .filter((x) => (x as any)._id.toString() !== req.user._id)
+      ?.filter((x) => (req.user.role === 'tenant' ? x.tenantUserId.tenantId === req.user._id.toString() : x));
+
+    const usersWithSockets = filteredUsers.map((user) => ({
+      ...user.toObject(),
+      socketId: userSocketMap.get(user._id.toString()) || null,
+    }));
+
+    return res.status(200).json(usersWithSockets);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
 };
 
 //register

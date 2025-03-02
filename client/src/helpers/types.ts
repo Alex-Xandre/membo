@@ -73,6 +73,7 @@ export interface EventTypes {
   createdBy: string;
   eventIsFeatured?: boolean;
   eventPrice: number;
+  maxAttendees?: number;
 }
 
 export interface TransactionEvent {

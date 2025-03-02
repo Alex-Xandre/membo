@@ -8,12 +8,18 @@ import { useFetchAndDispatch } from '@/helpers/useFetch';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { Calendar1Icon, ExternalLink, FilterIcon, MapPin } from 'lucide-react';
 import { useAuth } from '@/stores/AuthContext';
+import { useSidebar } from '@/components/ui/sidebar';
 
+import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, Tooltip);
 const LeftPanel = () => {
   const now = new Date();
   const { user } = useAuth();
   useFetchAndDispatch(getAllEvents, 'SET_EVENTS');
   const { events } = useEvent();
+  const { open } = useSidebar();
 
   const closestEvent = events
     ?.filter((event) => {
@@ -61,18 +67,51 @@ const LeftPanel = () => {
     updateFilter,
   } = useFilterStore();
 
+  const placeholderAvatar = 'https://res.cloudinary.com/dyhsose70/image/upload/v1696562163/avatar_ko5htr.png';
+
+  const data = {
+    datasets: [
+      {
+        data: [totalCompleteness, 100 - totalCompleteness],
+        backgroundColor: ['#3B82F6', '#BFDBFE'],
+        borderWidth: 2,
+        borderColor: '#ffffff',
+        hoverOffset: 5,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '70%',
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+  };
+
   return (
     <section
-      className={` p-3 w-1/4 2xl:w-1/6 bg-[#f7f8fc] h-screen overflow-y-hidden pb-24 absolute -top-4 ${
-        open ? '-left-8' : '-left-4'
+      className={` bg-white p-3 w-1/4 2xl:w-1/6 h-[calc(100vh-65px)] overflow-y-auto  absolute -top-2 rounded shadow ${
+        open ? '-left-6' : '-left-2'
       }`}
     >
-      <h1 className='font-semibold'>Welcome {user?.accountId}</h1>
-
-      <ScrollArea>
+      <header className='items-center flex flex-col justify-between gap-3 sticky top-0 bg-white'>
+        <img
+          src={user?.profile === '' ? placeholderAvatar : user?.profile}
+          className='rounded-full h-12'
+        />
+        <h1 className='font-semibold'>Welcome {user?.accountId}</h1>
+      </header>
+      <div className=''>
         <>
-          <h2 className='mt-3 italic text-xs py-5 border-t w-full inline-flex items-center '>
-            <span>Upcoming Event</span>
+          <h2 className='mt-3 italic text-xs py-5 border-t w-full inline-flex items-center justify-between '>
+            <span>Closest Upcoming Event</span>
             <span className='cursor-pointer'>
               <ExternalLink className='h-3' />
             </span>
@@ -81,7 +120,9 @@ const LeftPanel = () => {
           <h2 className='text-xs'>
             <div className='flex items-center gap-2 text-slate-600 font-semibold'>
               <div className='w-1/6 inline-flex gap-3 items-center'>
-                <MapPin className='h-3.5 text-gray-500' />
+                <p className='px-1 py-2 rounded bg-blue-100'>
+                  <MapPin className='h-3.5 text-blue-500' />
+                </p>
               </div>
               <span>
                 {closestEvent?.eventAddress?.fullAddress ? closestEvent.eventAddress?.fullAddress : 'No Address'}
@@ -93,22 +134,21 @@ const LeftPanel = () => {
           <h2 className='text-xs mt-3'>
             <div className='flex items-center gap-2 text-slate-600 font-semibold'>
               <div className='w-1/6 inline-flex gap-3 items-center'>
-                <Calendar1Icon className=' h-3.5 text-gray-500' />
+                <p className='px-1 py-2 rounded bg-red-100'>
+                  <Calendar1Icon className=' h-3.5 text-red-500' />
+                </p>
               </div>
-              <span>
-                {closestEvent
-                  ? `${closestEvent.eventName} - ${closestEvent.eventStartDate} at ${closestEvent.eventStartTime}`
-                  : 'No upcoming events'}
-              </span>
+              <span>{closestEvent ? `${closestEvent.eventName} ` : 'No upcoming events'}</span>
             </div>
           </h2>
 
           <h2 className='text-xs mt-3'>
             <div className='flex items-center gap-2 text-slate-600 font-semibold'>
-              <div className='w-1/6 inline-flex gap-3 items-center'>
-                {/* <Calendar1Icon className=' h-3.5 text-gray-500' /> */}
-              </div>
               <span>
+                {closestEvent
+                  ? `${closestEvent.eventStartDate} at ${closestEvent.eventStartTime}`
+                  : 'No upcoming events'}{' '}
+                &nbsp;
                 {closestEvent
                   ? `${getEventTimeStatus(
                       closestEvent.eventStartDate,
@@ -122,26 +162,24 @@ const LeftPanel = () => {
           </h2>
         </>
 
-        <>
-          <h2 className='mt-3 italic text-xs py-5 border-t w-full inline-flex items-center '>
+        <div className='items-center justify-center flex flex-col'>
+          <h2 className='mt-3 italic text-xs py-5 border-t w-full inline-flex items-center justify-between'>
             <span>Profile Completion</span>
             <span className='cursor-pointer'>
               <ExternalLink className='h-3' />
             </span>
           </h2>
-          <div className='w-full bg-gray-200 rounded-full h-3 relative mb-3'>
-            <div
-              className='bg-black h-3 rounded-full transition-all'
-              style={{ width: `${totalCompleteness}%` }}
+          <div className='relative h-32 w-32 inline-flex items-center justify-center'>
+            <Doughnut
+              data={data}
+              options={options}
             />
-            <span className='absolute inset-0 flex items-center justify-center text-xs font-semibold text-white'>
-              {totalCompleteness.toFixed(2)}%
-            </span>
+            <span className='absolute text-xs font-semibold text-black'>{totalCompleteness.toFixed(2)}%</span>
           </div>
-        </>
+        </div>
 
         <>
-          <h2 className='mt-3  text-sm font-semibold py-5 border-t w-full inline-flex items-center '>
+          <h2 className='mt-3  text-sm font-semibold py-5 border-t w-full inline-flex items-center justify-between '>
             <span>Export Reports</span>
             <span className='cursor-pointer'>
               <ExternalLink className='h-3' />
@@ -165,14 +203,14 @@ const LeftPanel = () => {
                 checked={isPublic}
                 onCheckedChange={() => updateFilter('isPublic')}
               />
-              <label className='text-sm'>Public</label>
+              <label className='text-xs'>Public</label>
             </div>
             <div className='flex items-center gap-2'>
               <Checkbox
                 checked={isFeatured}
                 onCheckedChange={() => updateFilter('isFeatured')}
               />
-              <label className='text-sm'>Featured</label>
+              <label className='text-xs'>Featured</label>
             </div>
           </div>
 
@@ -188,7 +226,7 @@ const LeftPanel = () => {
                   checked={eval(key)}
                   onCheckedChange={() => updateFilter(key)}
                 />
-                <label className='text-sm'>{key === 'free' ? 'Free' : `Price > ${key.replace('above', '')}`}</label>
+                <label className='text-xs'>{key === 'free' ? 'Free' : `Price > ${key.replace('above', '')}`}</label>
               </div>
             ))}
           </div>
@@ -205,12 +243,12 @@ const LeftPanel = () => {
                   checked={eval(key)}
                   onCheckedChange={() => updateFilter(key)}
                 />
-                <label className='text-sm'>{key.replace('lessThan', 'Less than ')}</label>
+                <label className='text-xs'>{key.replace('lessThan', 'Less than ')}</label>
               </div>
             ))}
           </div>
         </>
-      </ScrollArea>
+      </div>
     </section>
   );
 };

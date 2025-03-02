@@ -67,8 +67,25 @@ const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProp
                   return (
                     <TableCell
                       key={columnIndex}
-                      className=''
+                      className={`${
+                        (((row as any)?.profile && column.accessor === 'name') || column.accessor === 'socketId') &&
+                        'inline-flex items-center gap-x-3'
+                      }`}
                     >
+                      {(row as any)?.socketId && column.accessor === 'socketId' && (
+                        <>
+                          <p className='h-2 w-2 rounded-full bg-green-500' />
+                          <p>Online</p>
+                        </>
+                      )}
+
+                      {(row as any)?.socketId === null && column.accessor === 'socketId' && (
+                        <>
+                          <p className='h-2 w-2 rounded-full bg-red-500' />
+                          <p>Offline</p>
+                        </>
+                      )}
+
                       {column.accessor === 'users' ? (
                         <>
                           {row?.['users']?.length === 0 ? (
@@ -80,7 +97,7 @@ const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProp
                       ) : column.accessor === 'user' ? (
                         <div className='inline-flex items-center gap-x-3'>
                           <img
-                            className='h-4 rounded-full w-4'
+                            className='h-6 rounded-full w-6'
                             src={(row as any)?.profile !== '' ? (row as any)?.profile : placeholderAvatar}
                           />
                           {(row as any)?.user}

@@ -16,7 +16,7 @@ const TenantUsers = () => {
   const columns = [
     { header: 'User', accessor: 'user' },
     { header: 'Role', accessor: 'role' },
-    { header: 'Status', accessor: 'isOnline' },
+    { header: 'Status', accessor: 'socketId' },
   ];
 
   const breadcrumbItems = [
@@ -40,6 +40,7 @@ const TenantUsers = () => {
     }
   }, [dispatch]);
 
+  console.log(allUser);
   if (params.search.includes('new')) {
     return <NewTenantUser />;
   }
@@ -63,6 +64,7 @@ const TenantUsers = () => {
             return {
               ...x,
               user: x.personalData?.firstName + ' ' + x.personalData?.lastName,
+              socketId: (x as any)?.socketId,
             };
           })}
         columns={columns as any}

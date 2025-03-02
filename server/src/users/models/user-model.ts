@@ -34,19 +34,20 @@ const personalSchema = new Schema(
 const userSchema = new Schema<UserTypes>(
   {
     password: String,
-    role: { type: String, enum: ['admin', 'user', "tenant"], default: 'user' },
+    role: { type: String, enum: ['admin', 'user', 'tenant'], default: 'user' },
     userId: String,
     personalData: personalSchema,
     email: String,
+    status: { type: Boolean, default: false },
     profile: {
       type: String,
       default: 'https://res.cloudinary.com/dyhsose70/image/upload/v1696562163/avatar_ko5htr.png',
     },
     accountId: String,
-    tenantUserId:{
-      tenantId:String,
-      tenantRole: { type: String, enum: ['admin', 'user', "tenant"], default: 'user' },
-    }
+    tenantUserId: {
+      tenantId: String,
+      tenantRole: { type: String, enum: ['admin', 'user', 'tenant'], default: 'user' },
+    },
   },
   { timestamps: true }
 );

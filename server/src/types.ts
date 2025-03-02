@@ -41,7 +41,7 @@ export interface UserTypes {
   email: string;
   accountId: string;
   profile: string;
-
+  status?: boolean;
   tenantUserId: {
     tenantId: string;
     tenantRole: 'admin' | 'user' | 'tenant';
@@ -67,6 +67,7 @@ export interface EventTypes {
   createdBy: ObjectId;
   eventIsFeatured: boolean;
   eventPrice: number;
+  maxAttendees: number;
 }
 
 export interface TransactionEvent {

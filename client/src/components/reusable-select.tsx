@@ -15,7 +15,7 @@ const SelectInput: React.FC<SelectInputI> = ({ label, value, onValueChange, opti
       value={value}
       onValueChange={onValueChange}
     >
-      <SelectTrigger>
+      <SelectTrigger className='bg-white'>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

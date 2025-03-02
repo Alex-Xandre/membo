@@ -20,6 +20,7 @@ const eventSchema = new Schema<EventTypes>(
       longitude: { type: Number },
     },
     eventPrice: { type: Number, default: 0 },
+    maxAttendees: { type: Number, default: 100 },
   },
   {
     timestamps: true,

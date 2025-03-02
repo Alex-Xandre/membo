@@ -30,7 +30,7 @@ export function NavMain({
   const navigate = useNavigate(); // Initialize navigate function
 
   const handleNavigation = (url: string) => {
-    console.log(url);
+   
     navigate(url);
   };
 

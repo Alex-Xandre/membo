@@ -96,21 +96,17 @@ const LeftPanel = () => {
   };
 
   return (
-    <section
-      className={` bg-white p-3 w-1/4 2xl:w-1/6 h-[calc(100vh-65px)] overflow-y-auto  absolute -top-2 rounded shadow ${
-        open ? '-left-6' : '-left-2'
-      }`}
-    >
-      <header className='items-center flex flex-col justify-between gap-3 sticky top-0 bg-white'>
+    <section className={` bg-white p-3  absolute  rounded-xl shadow left-0 `}>
+      {/* <header className='items-center flex flex-col justify-between gap-3 sticky top-0 bg-white'>
         <img
           src={user?.profile === '' ? placeholderAvatar : user?.profile}
           className='rounded-full h-12'
         />
         <h1 className='font-semibold'>Welcome {user?.accountId}</h1>
-      </header>
-      <div className=''>
-        <>
-          <h2 className='mt-3 italic text-xs py-5 border-t w-full inline-flex items-center justify-between '>
+      </header> */}
+      <div className='flex gap-x-8 '>
+        <div className='w-96'>
+          <h2 className='mt-2  text-sm font-semibold pb-5 w-full inline-flex items-center justify-between '>
             <span>Closest Upcoming Event</span>
             <span className='cursor-pointer'>
               <ExternalLink className='h-3' />
@@ -160,94 +156,95 @@ const LeftPanel = () => {
               </span>
             </div>
           </h2>
-        </>
 
-        <div className='items-center justify-center flex flex-col'>
-          <h2 className='mt-3 italic text-xs py-5 border-t w-full inline-flex items-center justify-between'>
-            <span>Profile Completion</span>
-            <span className='cursor-pointer'>
-              <ExternalLink className='h-3' />
-            </span>
-          </h2>
-          <div className='relative h-32 w-32 inline-flex items-center justify-center'>
-            <Doughnut
-              data={data}
-              options={options}
-            />
-            <span className='absolute text-xs font-semibold text-black'>{totalCompleteness.toFixed(2)}%</span>
+          <div className='items-center justify-center flex flex-col'>
+            <h2 className='mt-2  text-sm font-semibold py-5 w-full inline-flex items-center justify-between '>
+              <span>Profile Completion</span>
+              <span className='cursor-pointer'>
+                <ExternalLink className='h-3' />
+              </span>
+            </h2>
+            <div className='relative h-32 w-32 inline-flex items-center justify-center'>
+              <Doughnut
+                data={data}
+                options={options}
+              />
+              <span className='absolute text-xs font-semibold text-black'>{totalCompleteness.toFixed(2)}%</span>
+            </div>
           </div>
         </div>
+        <div className='w-80'>
+          <>
+            <h2 className='mt-2  text-sm font-semibold pb-5 w-full inline-flex items-center justify-between '>
+              <span>Export Reports</span>
+              <span className='cursor-pointer'>
+                <ExternalLink className='h-3' />
+              </span>
+            </h2>
+            <h3 className='text-xs text-gray-400'>Exporting report beta for now</h3>
+          </>
 
-        <>
-          <h2 className='mt-3  text-sm font-semibold py-5 border-t w-full inline-flex items-center justify-between '>
-            <span>Export Reports</span>
-            <span className='cursor-pointer'>
-              <ExternalLink className='h-3' />
-            </span>
-          </h2>
-          <h3 className='text-xs text-gray-400'>Exporting report beta for now</h3>
-        </>
+          <>
+            <h2 className='mt-3  text-sm font-semibold py-5 border-t w-full inline-flex items-center '>
+              <span>Additional Filters</span>
+              <span className='cursor-pointer'>
+                <FilterIcon className='h-3' />
+              </span>
+            </h2>
 
-        <>
-          <h2 className='mt-3  text-sm font-semibold py-5 border-t w-full inline-flex items-center '>
-            <span>Additional Filters</span>
-            <span className='cursor-pointer'>
-              <FilterIcon className='h-3' />
-            </span>
-          </h2>
-
-          {/* Public & Featured */}
-          <div className='space-y-2'>
-            <div className='flex items-center gap-2'>
-              <Checkbox
-                checked={isPublic}
-                onCheckedChange={() => updateFilter('isPublic')}
-              />
-              <label className='text-xs'>Public</label>
-            </div>
-            <div className='flex items-center gap-2'>
-              <Checkbox
-                checked={isFeatured}
-                onCheckedChange={() => updateFilter('isFeatured')}
-              />
-              <label className='text-xs'>Featured</label>
-            </div>
-          </div>
-
-          {/* Price Range */}
-          <h3 className='mt-4 text-xs font-semibold'>Price Range</h3>
-          <div className='space-y-2 mt-3'>
-            {['free', 'above100', 'above1000', 'above10000'].map((key) => (
-              <div
-                key={key}
-                className='flex items-center gap-2'
-              >
+            {/* Public & Featured */}
+            <div className='space-y-2'>
+              <div className='flex items-center gap-2'>
                 <Checkbox
-                  checked={eval(key)}
-                  onCheckedChange={() => updateFilter(key)}
+                  checked={isPublic}
+                  onCheckedChange={() => updateFilter('isPublic')}
                 />
-                <label className='text-xs'>{key === 'free' ? 'Free' : `Price > ${key.replace('above', '')}`}</label>
+                <label className='text-xs'>Public</label>
               </div>
-            ))}
-          </div>
-
-          {/* Attendees */}
-          <h3 className='mt-4 text-xs font-semibold'>Attendees</h3>
-          <div className='space-y-2 mt-3'>
-            {['lessThan10', 'lessThan100', 'lessThan1000'].map((key) => (
-              <div
-                key={key}
-                className='flex items-center gap-2'
-              >
+              <div className='flex items-center gap-2'>
                 <Checkbox
-                  checked={eval(key)}
-                  onCheckedChange={() => updateFilter(key)}
+                  checked={isFeatured}
+                  onCheckedChange={() => updateFilter('isFeatured')}
                 />
-                <label className='text-xs'>{key.replace('lessThan', 'Less than ')}</label>
+                <label className='text-xs'>Featured</label>
               </div>
-            ))}
-          </div>
-        </>
+            </div>
+
+            {/* Price Range */}
+            <h3 className='mt-4 text-xs font-semibold'>Price Range</h3>
+            <div className='space-y-2 mt-3'>
+              {['free', 'above100', 'above1000', 'above10000'].map((key) => (
+                <div
+                  key={key}
+                  className='flex items-center gap-2'
+                >
+                  <Checkbox
+                    checked={eval(key)}
+                    onCheckedChange={() => updateFilter(key)}
+                  />
+                  <label className='text-xs'>{key === 'free' ? 'Free' : `Price > ${key.replace('above', '')}`}</label>
+                </div>
+              ))}
+            </div>
+
+            {/* Attendees */}
+            <h3 className='mt-4 text-xs font-semibold'>Attendees</h3>
+            <div className='space-y-2 mt-3'>
+              {['lessThan10', 'lessThan100', 'lessThan1000'].map((key) => (
+                <div
+                  key={key}
+                  className='flex items-center gap-2'
+                >
+                  <Checkbox
+                    checked={eval(key)}
+                    onCheckedChange={() => updateFilter(key)}
+                  />
+                  <label className='text-xs'>{key.replace('lessThan', 'Less than ')}</label>
+                </div>
+              ))}
+            </div>
+          </>
+        </div>
       </div>
     </section>
   );

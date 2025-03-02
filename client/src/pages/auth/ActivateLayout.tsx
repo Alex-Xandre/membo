@@ -46,7 +46,7 @@ const ActivationCodeLayout: React.FC = () => {
     try {
       const searchParams = new URLSearchParams(location.search);
       const token = searchParams.get('token');
-      console.log(code.length);
+
 
       const handleActivate = async () => {
         if (code.every((digit) => digit !== '')) {

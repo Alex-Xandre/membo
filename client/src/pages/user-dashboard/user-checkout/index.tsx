@@ -38,7 +38,6 @@ const CheckOutHome = () => {
   const searchParams = new URLSearchParams(location.search);
   const isCart = searchParams.get('cart');
 
-  console.log(isCart);
 
   useEffect(() => {
     if (user) {

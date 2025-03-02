@@ -40,7 +40,7 @@ const TenantUsers = () => {
     }
   }, [dispatch]);
 
-  console.log(allUser);
+
   if (params.search.includes('new')) {
     return <NewTenantUser />;
   }

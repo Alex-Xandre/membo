@@ -40,7 +40,6 @@ const TenantHome = () => {
       <TenantSidebar />
       <section
         className={`
-        ${user.role === 'tenant' && (!open ? 'ml-80 w-[calc(100vw-20rem)]' : 'ml-[34.5rem] w-[calc(100vw-34.5rem)]')}
         flex-grow-0 w-full   absolute z-30 flex items-center justify-center  left-0 h-[calc(100dvh-70px)] overflow-y-auto pt-3`}
       >
         <div className={`flex-grow h-full px-5 ${user.role === 'admin' && 'ml-72'}`}>

@@ -78,7 +78,7 @@ const NewTenantUser = () => {
     }
   }, [allUser, item.search, state?.isEdit]);
 
-  console.log(item);
+
 
   useEffect(() => {
     if (params?.tenantId && item.search === '?view=profile') {

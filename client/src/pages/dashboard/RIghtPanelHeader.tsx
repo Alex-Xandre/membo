@@ -68,7 +68,7 @@ const RIghtPanelHeader = () => {
         </Popover>
       </div>
 
-      <div className='flex flex-col'>
+      {/* <div className='flex flex-col'>
         <label className='text-xs font-medium mb-1'>Event Category</label>
         <SelectInput
           value={eventType}
@@ -90,7 +90,7 @@ const RIghtPanelHeader = () => {
           ]}
           placeholder={'Event Type'}
         />
-      </div>
+      </div> */}
 
       <Button>
         Export 

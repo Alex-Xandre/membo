@@ -63,7 +63,6 @@ const ReusableTable = <T,>({ data, columns, caption, onEdit, onView }: TableProp
                   const placeholderAvatar =
                     'https://res.cloudinary.com/dyhsose70/image/upload/v1696562163/avatar_ko5htr.png';
 
-                  console.log(row);
                   return (
                     <TableCell
                       key={columnIndex}

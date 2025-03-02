@@ -196,7 +196,7 @@ const RegisterLayout: React.FC = () => {
     if (res.success === false) return toast.error(res.data?.msg || 'Error');
     toast.success('Please Check your email fo activation');
     setCurrentStep(3);
-    console.log(res);
+
     navigate(`/register?token=${res?.link}`);
   };
 

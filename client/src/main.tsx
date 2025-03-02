@@ -14,7 +14,6 @@ const root = createRoot(container);
 
 const apiBase = import.meta.env.VITE_API_URL as string;
 
-console.log(apiBase);
 const FetchBaseName = () => {
   const location = useLocation(); // Now safe to use
   const setBaseName = useBaseNameStore((state: any) => state.setBaseName);

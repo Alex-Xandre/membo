@@ -102,7 +102,7 @@ const TicketChart = () => {
       <h1 className='font-semibold'>
         SALES OVERVIEW <span className='font-normal'>(All Events)</span>
       </h1>
-      <header className='flex gap-24 my-5'>
+      <header className='flex gap-x-24 my-5 flex-wrap'>
        
       <div className='flex-shrink-0'>
           <h1 className='uppercase text-xs font-semibold text-gray-600'>Tickets Sold</h1>
@@ -125,10 +125,10 @@ const TicketChart = () => {
           <h2 className='text-lg font-bold'>${totalRevenue.toLocaleString()}</h2>
         </div>
 
-        <div>
+        <div className='w-full mt-8'>
           <h1 className='uppercase text-xs font-semibold text-gray-600'>Revenue Details</h1>
           <p className='text-sm font-medium text-gray-500'>
-            <span className='font-semibold text-gray-700'>
+            <span className='font-normal text-gray-700'>
               Revenue shows the total earnings from completed ticket sales, helping track financial performance and
               sales trends
             </span>

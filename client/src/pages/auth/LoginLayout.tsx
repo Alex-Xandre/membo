@@ -33,7 +33,6 @@ const LoginLayout = () => {
     if (res.success === false) return toast.error(res.data?.msg || 'Error');
 
 
-    console.log(baseName)
     if (res.role === 'user' && baseName?._id !== res?.tenantId) {
       return toast.error('Account Error');
     }

@@ -49,7 +49,7 @@ export const EventCard = ({ event, users }) => {
           {!isFree && `(${event.maxAttendees - confirmedAttendees}  tickets left )`}
         </span>
       </div>
-      {users && <AvatarStack avatars={users.find((x) => x._id === event._id).users ?? []} />}
+      {users && users?.length > 0 && <AvatarStack avatars={users.find((x) => x._id === event._id).users ?? []} />}
     </div>
   );
 };
@@ -71,7 +71,6 @@ const EventsList = ({ date, events, transactions }) => {
       return { items: items.events, userId: items._id };
     })
     .flat();
-
 
   const result = events
     .map((event) => {
@@ -104,7 +103,6 @@ const EventsList = ({ date, events, transactions }) => {
         return acc;
       }, {});
 
-
     return events
       .filter((event: EventTypes) => {
         const eventDate = new Date(event.eventStartDate);
@@ -119,7 +117,6 @@ const EventsList = ({ date, events, transactions }) => {
         confirmedAttendees: attendeeCounts[event._id] || 0,
       }));
   }, [date, events, transactions]);
-
 
   return (
     <div className='space-y-4'>
